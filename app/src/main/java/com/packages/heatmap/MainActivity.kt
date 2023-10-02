@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.android.gms.maps.GoogleMap
 import com.packages.heatmap.ui.theme.HeatMapTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,3 +45,4 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
