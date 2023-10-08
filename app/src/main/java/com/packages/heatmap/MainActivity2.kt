@@ -3,20 +3,25 @@ package com.packages.heatmap
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.search.SearchBar
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.packages.heatmap.ui.theme.HeatMapTheme
+import com.packages.heatmap.ui.tools.MySearchBar
 
 class MainActivity2 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,19 +29,26 @@ class MainActivity2 : ComponentActivity() {
         setContent {
 
             HeatMapTheme {
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 )
 
                 {
-                    ShowMap()
+                    Column() {
+
+                        MySearchBar()
+                        ShowMap()
+                    }
                 }
             }
         }
     }
 }
+
+
 
 @Composable
 fun ShowMap(modifier: Modifier = Modifier) {
@@ -49,13 +61,14 @@ fun ShowMap(modifier: Modifier = Modifier) {
         cameraPositionState = cameraPositionState,
 
     ) {
+
         Marker(
             state = MarkerState(position = singapore),
             title = "klejdi",
             snippet = "Marker in Singapore"
         )
-
     }
+
 }
 
 @Preview(showBackground = true)
