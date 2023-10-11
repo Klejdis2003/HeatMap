@@ -1,0 +1,67 @@
+﻿Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column9,Column10,Column11,Column12,Column13,Column14,Column15,Column16,Column17,Column18,Column19,Column20,Column21,Column22,Column23,Column24
+1,Snapped lat,Snapped lon,Walk Score,Walk Score Label,Average Block Length (meters),Average Block Length Score,Intersection Density (inscts/mi^2),Intersection Density Score,Transit Score,Transit Score Label,Bike Score,Bike Score Label,City Name,City Walk Score,Rail Stops in 0.5mi,Errands Score,Culture Score,Grocery Score,Park Score,Dining and Drinking Score,School Score,Shopping Score
+2,38.901,-77.046,99,Walker's Paradise,104.18,95.82,250.83,83.61,95,Rider's Paradise,67,Bikeable,Washington D.C.,73.20,3,100.00,93.45,97.89,100.00,100.00,99.67,99.63
+3,38.9115,-77.0355,97,Walker's Paradise,97.10,100.00,287.75,95.92,92,Rider's Paradise,93,Biker's Paradise,Washington D.C.,73.20,1,97.70,78.34,100.00,100.00,99.50,94.49,98.15
+4,38.904,-77.025,98,Walker's Paradise,100.95,99.05,247.01,82.34,100,Rider's Paradise,92,Biker's Paradise,Washington D.C.,73.20,5,99.98,97.27,95.08,100.00,99.77,97.74,95.49
+5,38.8995,-77.0385,99,Walker's Paradise,120.64,79.36,184.62,61.54,98,Rider's Paradise,77,Very Bikeable,Washington D.C.,73.20,3,100.00,94.35,98.72,100.00,99.98,100.00,96.78
+6,38.91,-77.0475,100,Walker's Paradise,98.83,100.00,255.92,85.31,85,Excellent Transit,90,Biker's Paradise,Washington D.C.,73.20,1,98.91,94.89,100.00,100.00,100.00,100.00,99.20
+7,38.9235,-77.0205,87,Very Walkable,131.79,68.21,138.78,46.26,75,Excellent Transit,72,Very Bikeable,Washington D.C.,73.20,0,55.42,48.34,87.50,100.00,94.49,98.69,91.60
+8,38.9775,-77.0325,60,Somewhat Walkable,128.79,71.21,110.77,36.92,67,Good Transit,43,Somewhat Bikeable,Washington D.C.,73.20,0,56.74,4.35,80.32,100.00,79.46,69.78,39.40
+9,38.8875,-77.025,79,Very Walkable,150.03,49.97,127.32,42.44,96,Rider's Paradise,89,Very Bikeable,Washington D.C.,73.20,6,98.24,99.92,52.64,100.00,95.18,97.01,71.41
+10,38.901,-77.0355,99,Walker's Paradise,99.59,100.00,249.55,83.18,100,Rider's Paradise,82,Very Bikeable,Washington D.C.,73.20,4,100.00,98.09,98.47,100.00,100.00,96.14,99.98
+11,38.907,-77.061,99,Walker's Paradise,106.59,93.41,174.43,58.14,73,Excellent Transit,87,Very Bikeable,Washington D.C.,73.20,0,100.00,90.38,97.80,100.00,100.00,100.00,100.00
+12,38.8995,-77.0385,99,Walker's Paradise,120.64,79.36,184.62,61.54,98,Rider's Paradise,77,Very Bikeable,Washington D.C.,73.20,3,100.00,94.35,98.72,100.00,99.98,100.00,96.78
+13,38.9175,-77.049,89,Very Walkable,120.92,79.08,197.35,65.78,77,Excellent Transit,85,Very Bikeable,Washington D.C.,73.20,0,96.92,71.03,95.03,100.00,92.65,79.11,86.97
+14,38.9055,-77.025,98,Walker's Paradise,100.35,99.65,252.10,84.03,100,Rider's Paradise,94,Biker's Paradise,Washington D.C.,73.20,2,94.82,90.01,100.00,100.00,99.94,97.27,96.05
+15,38.8995,-77.0385,99,Walker's Paradise,120.64,79.36,184.62,61.54,98,Rider's Paradise,77,Very Bikeable,Washington D.C.,73.20,3,100.00,94.35,98.72,100.00,99.98,100.00,96.78
+16,38.919,-77.0355,97,Walker's Paradise,116.81,83.19,197.35,65.78,86,Excellent Transit,86,Very Bikeable,Washington D.C.,73.20,1,95.74,76.56,98.49,100.00,99.01,100.00,98.16
+17,38.8935,-77.04,86,Very Walkable,131.00,69.00,112.05,37.35,89,Excellent Transit,86,Very Bikeable,Washington D.C.,73.20,0,96.94,100.00,79.47,100.00,89.97,97.63,81.02
+18,38.8965,-77.04,99,Walker's Paradise,122.96,77.04,157.88,52.63,94,Rider's Paradise,79,Very Bikeable,Washington D.C.,73.20,2,99.21,100.00,97.05,100.00,99.03,99.99,96.95
+19,38.907,-77.04,98,Walker's Paradise,97.42,100.00,297.94,99.31,98,Rider's Paradise,84,Very Bikeable,Washington D.C.,73.20,3,100.00,95.52,91.37,100.00,100.00,99.97,99.65
+20,38.8995,-77.0385,99,Walker's Paradise,120.64,79.36,184.62,61.54,98,Rider's Paradise,77,Very Bikeable,Washington D.C.,73.20,3,100.00,94.35,98.72,100.00,99.98,100.00,96.78
+21,38.895,-77.0175,98,Walker's Paradise,119.65,80.35,173.16,57.72,100,Rider's Paradise,86,Very Bikeable,Washington D.C.,73.20,5,100.00,96.08,100.00,100.00,99.36,99.69,87.70
+22,38.9025,-77.0295,99,Walker's Paradise,103.74,96.26,247.01,82.34,100,Rider's Paradise,90,Biker's Paradise,Washington D.C.,73.20,3,100.00,100.00,96.14,100.00,100.00,100.00,99.75
+23,38.907,-77.04,98,Walker's Paradise,97.42,100.00,297.94,99.31,98,Rider's Paradise,84,Very Bikeable,Washington D.C.,73.20,3,100.00,95.52,91.37,100.00,100.00,99.97,99.65
+24,38.8965,-77.0235,100,Walker's Paradise,123.35,76.65,165.52,55.17,100,Rider's Paradise,86,Very Bikeable,Washington D.C.,73.20,7,100.00,100.00,100.00,100.00,100.00,100.00,99.98
+25,38.91,-77.0655,97,Walker's Paradise,111.99,88.01,159.15,53.05,64,Good Transit,80,Very Bikeable,Washington D.C.,73.20,0,100.00,94.33,89.57,100.00,100.00,98.55,100.00
+26,38.9175,-77.013,84,Very Walkable,115.62,84.38,171.89,57.30,74,Excellent Transit,74,Very Bikeable,Washington D.C.,73.20,0,51.29,58.92,100.00,100.00,91.51,79.80,88.29
+27,38.913,-77.037,98,Walker's Paradise,100.23,99.77,273.75,91.25,92,Rider's Paradise,93,Biker's Paradise,Washington D.C.,73.20,1,99.69,80.63,99.47,100.00,100.00,99.12,96.73
+28,38.907,-77.073,79,Very Walkable,110.69,89.31,91.67,30.56,67,Good Transit,72,Very Bikeable,Washington D.C.,73.20,0,50.06,27.79,96.97,94.48,93.12,85.87,74.34
+29,38.9235,-77.022,91,Walker's Paradise,127.30,72.70,145.15,48.38,77,Excellent Transit,74,Very Bikeable,Washington D.C.,73.20,0,63.60,56.60,96.64,100.00,99.37,100.00,90.94
+30,38.913,-77.049,98,Walker's Paradise,103.96,96.04,244.46,81.49,83,Excellent Transit,80,Very Bikeable,Washington D.C.,73.20,1,98.56,100.00,96.42,100.00,99.39,97.27,97.43
+31,38.892,-77.0055,93,Walker's Paradise,101.44,98.56,224.09,74.70,90,Rider's Paradise,90,Biker's Paradise,Washington D.C.,73.20,4,100.00,100.00,91.66,100.00,94.35,95.99,90.50
+32,38.9025,-77.034,100,Walker's Paradise,99.12,100.00,257.19,85.73,100,Rider's Paradise,85,Very Bikeable,Washington D.C.,73.20,4,100.00,100.00,100.00,100.00,100.00,97.02,100.00
+33,38.889,-77.004,98,Walker's Paradise,97.71,100.00,259.74,86.58,86,Excellent Transit,93,Biker's Paradise,Washington D.C.,73.20,1,100.00,100.00,93.96,100.00,99.81,100.00,98.55
+34,38.9085,-77.0415,99,Walker's Paradise,100.77,99.23,280.11,93.37,91,Rider's Paradise,87,Very Bikeable,Washington D.C.,73.20,2,100.00,99.49,93.61,100.00,100.00,100.00,100.00
+35,38.8935,-77.04,86,Very Walkable,131.00,69.00,112.05,37.35,89,Excellent Transit,86,Very Bikeable,Washington D.C.,73.20,0,96.94,100.00,79.47,100.00,89.97,97.63,81.02
+36,38.9205,-77.0355,92,Walker's Paradise,115.89,84.11,199.90,66.63,84,Excellent Transit,86,Very Bikeable,Washington D.C.,73.20,1,99.14,66.64,94.00,100.00,96.35,98.76,94.36
+37,38.8965,-76.9305,46,Car-Dependent,125.51,74.49,197.35,65.78,63,Good Transit,48,Somewhat Bikeable,Washington D.C.,73.20,0,88.00,0.00,80.03,100.00,50.24,100.00,18.63
+38,38.8965,-77.0415,100,Walker's Paradise,119.09,80.91,160.43,53.48,92,Rider's Paradise,78,Very Bikeable,Washington D.C.,73.20,2,100.00,100.00,100.00,100.00,99.25,100.00,99.71
+39,38.895,-77.052,87,Very Walkable,97.48,100.00,120.96,40.32,76,Excellent Transit,88,Very Bikeable,Washington D.C.,73.20,1,83.87,53.55,99.81,100.00,90.84,82.26,71.16
+40,38.898,-77.0235,99,Walker's Paradise,114.99,85.01,192.26,64.09,100,Rider's Paradise,87,Very Bikeable,Washington D.C.,73.20,7,100.00,100.00,96.52,100.00,100.00,100.00,99.95
+41,38.898,-77.0175,96,Walker's Paradise,118.90,81.10,185.89,61.96,100,Rider's Paradise,84,Very Bikeable,Washington D.C.,73.20,5,94.81,100.00,95.05,100.00,99.43,88.02,89.09
+42,38.916,-77.052,80,Very Walkable,123.89,76.11,173.16,57.72,77,Excellent Transit,83,Very Bikeable,Washington D.C.,73.20,0,79.14,91.81,98.37,100.00,80.39,57.17,71.78
+43,38.895,-77.04,94,Walker's Paradise,131.64,68.36,128.60,42.87,92,Rider's Paradise,83,Very Bikeable,Washington D.C.,73.20,1,100.00,99.71,90.27,100.00,95.79,99.98,91.47
+44,38.8995,-77.04,100,Walker's Paradise,119.84,80.16,185.89,61.96,100,Rider's Paradise,74,Very Bikeable,Washington D.C.,73.20,3,100.00,97.65,100.00,100.00,100.00,100.00,99.85
+45,38.9115,-77.031,97,Walker's Paradise,103.05,96.95,259.74,86.58,90,Rider's Paradise,93,Biker's Paradise,Washington D.C.,73.20,1,98.06,92.45,100.00,100.00,100.00,99.89,98.48
+46,38.8485,-76.989,15,Car-Dependent,135.54,64.46,113.32,37.77,69,Good Transit,31,Somewhat Bikeable,Washington D.C.,73.20,1,6.59,0.00,15.76,60.34,17.06,57.65,10.42
+47,38.901,-77.0355,99,Walker's Paradise,99.59,100.00,249.55,83.18,100,Rider's Paradise,82,Very Bikeable,Washington D.C.,73.20,4,100.00,98.09,98.47,100.00,100.00,96.14,99.98
+48,38.91,-77.034,99,Walker's Paradise,100.92,99.08,273.75,91.25,96,Rider's Paradise,92,Biker's Paradise,Washington D.C.,73.20,0,100.00,91.73,100.00,100.00,100.00,97.44,97.29
+49,38.892,-77.004,97,Walker's Paradise,99.55,100.00,241.92,80.64,88,Excellent Transit,94,Biker's Paradise,Washington D.C.,73.20,3,99.57,100.00,96.96,100.00,96.38,99.39,94.31
+50,38.889,-77.0265,81,Very Walkable,156.70,43.30,124.78,41.59,98,Rider's Paradise,87,Very Bikeable,Washington D.C.,73.20,6,91.64,100.00,63.50,100.00,90.52,100.00,76.85
+51,38.898,-77.0385,98,Walker's Paradise,120.57,79.43,178.25,59.42,100,Rider's Paradise,79,Very Bikeable,Washington D.C.,73.20,3,100.00,84.97,99.76,100.00,99.59,98.74,97.17
+52,38.8905,-77.004,97,Walker's Paradise,99.90,100.00,249.55,83.18,87,Excellent Transit,93,Biker's Paradise,Washington D.C.,73.20,1,97.06,100.00,94.47,100.00,96.65,100.00,95.88
+53,38.916,-77.016,97,Walker's Paradise,113.58,86.42,216.45,72.15,77,Excellent Transit,84,Very Bikeable,Washington D.C.,73.20,1,89.57,93.93,100.00,100.00,98.34,100.00,93.10
+54,38.9115,-77.064,98,Walker's Paradise,114.20,85.80,159.15,53.05,65,Good Transit,69,Bikeable,Washington D.C.,73.20,0,100.00,99.27,94.47,100.00,99.23,98.48,99.76
+55,38.9145,-77.04,97,Walker's Paradise,105.44,94.56,268.65,89.55,90,Rider's Paradise,94,Biker's Paradise,Washington D.C.,73.20,1,89.03,71.61,100.00,100.00,100.00,92.42,98.43
+56,38.898,-77.046,98,Walker's Paradise,107.90,92.10,207.54,69.18,92,Rider's Paradise,74,Very Bikeable,Washington D.C.,73.20,2,100.00,86.11,98.50,100.00,99.48,100.00,100.00
+57,38.9025,-77.037,99,Walker's Paradise,102.28,97.72,240.64,80.21,100,Rider's Paradise,78,Very Bikeable,Washington D.C.,73.20,3,100.00,95.30,98.29,100.00,100.00,100.00,100.00
+58,38.889,-77.0085,86,Very Walkable,102.56,97.44,225.36,75.12,90,Rider's Paradise,84,Very Bikeable,Washington D.C.,73.20,2,94.21,87.34,72.17,100.00,92.31,88.62,88.10
+59,38.9415,-77.0115,59,Somewhat Walkable,117.89,82.11,132.42,44.14,60,Good Transit,62,Bikeable,Washington D.C.,73.20,0,63.90,4.60,100.00,100.00,56.48,100.00,43.29
+60,38.91,-77.0685,95,Walker's Paradise,112.20,87.80,151.52,50.51,64,Good Transit,84,Very Bikeable,Washington D.C.,73.20,0,93.65,83.64,90.63,100.00,96.31,100.00,98.48
+61,38.874,-76.9965,80,Very Walkable,123.82,76.18,131.14,43.71,72,Excellent Transit,89,Very Bikeable,Washington D.C.,73.20,1,100.00,7.08,87.12,100.00,92.17,88.77,66.68
+62,38.898,-77.037,97,Walker's Paradise,120.86,79.14,175.71,58.57,100,Rider's Paradise,82,Very Bikeable,Washington D.C.,73.20,4,99.76,81.70,98.52,100.00,98.51,97.25,95.39
+63,38.925,-77.034,91,Walker's Paradise,122.55,77.45,194.81,64.94,85,Excellent Transit,93,Biker's Paradise,Washington D.C.,73.20,1,92.73,75.24,94.45,100.00,92.79,99.14,91.42
+64,38.9145,-77.052,86,Very Walkable,120.82,79.18,182.07,60.69,79,Excellent Transit,79,Very Bikeable,Washington D.C.,73.20,1,84.17,98.59,97.43,100.00,84.96,71.84,80.39
+65,38.91,-77.0235,95,Walker's Paradise,103.34,96.66,262.29,87.43,82,Excellent Transit,95,Biker's Paradise,Washington D.C.,73.20,2,100.00,96.89,100.00,100.00,99.69,100.00,85.03
+66,38.9085,-77.037,98,Walker's Paradise,94.45,100.00,303.03,100.00,92,Rider's Paradise,91,Biker's Paradise,Washington D.C.,73.20,2,96.31,93.78,97.40,100.00,100.00,100.00,96.00
