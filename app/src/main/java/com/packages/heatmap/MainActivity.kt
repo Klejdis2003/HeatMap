@@ -2,8 +2,6 @@ package com.packages.heatmap
 
 import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -11,15 +9,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.Circle
@@ -27,13 +20,12 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerInfoWindowContent
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVReader
 import com.packages.heatmap.ui.theme.HeatMapTheme
 import com.packages.heatmap.ui.tools.MySearchBar
-import com.packages.heatmap.walkscore.WalkScoreInformation
+import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.*
 
 import java.io.InputStreamReader
@@ -83,8 +75,8 @@ fun ShowMap(modifier: Modifier = Modifier, csvReader: CSVReader) {
         mapStyle = MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.light_map_style)
     }
     var selectedCircle: String = " "
-    val dataMap: HashMap<LatLng, WalkScoreInformation> =  buildHashMap(csvReader)
-    val firstMapObject: WalkScoreInformation = dataMap[dataMap.keys.first()]!!
+    val dataMap: HashMap<LatLng, Area> =  buildHashMap(csvReader)
+    val firstMapObject: Area = dataMap[dataMap.keys.first()]!!
     var location = LatLng(firstMapObject.latitude, firstMapObject.longitude)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 12f);
@@ -103,7 +95,7 @@ fun ShowMap(modifier: Modifier = Modifier, csvReader: CSVReader) {
 
     ) {
         for (key: LatLng in dataMap.keys) {
-            val walkScoreObj: WalkScoreInformation = dataMap[key]!!
+            val walkScoreObj: Area = dataMap[key]!!
             location = LatLng(walkScoreObj!!.latitude, walkScoreObj.longitude)
             Marker(
                 state = MarkerState(position = location),
@@ -116,15 +108,20 @@ fun ShowMap(modifier: Modifier = Modifier, csvReader: CSVReader) {
             Circle(
                 clickable = true,
                 center = location,
-                radius = 1200.0,
+                radius = walkScoreObj.radius,
                 strokeColor = Color.Transparent,
-                fillColor = WalkScoreInformation.getColorByWalkscore(walkScoreObj.walkScore),
+                fillColor = Area.getColorByWalkscore(walkScoreObj.walkScore),
                 tag = geoCoder.getFromLocation(walkScoreObj.latitude, walkScoreObj.longitude, 1)!![0].getAddressLine(0),
 //                onClick = {it: Circle-> selectedCircle}
             )
 
 
         }
+        Marker(
+             state = MarkerState(position = LatLng(38.87, -77.1)),
+             title = "Marker",
+             snippet = Area.getListOfAreasThatContainPoint(LatLng(38.908647, -77.036539)).size.toString()
+        )
 
     }
 
