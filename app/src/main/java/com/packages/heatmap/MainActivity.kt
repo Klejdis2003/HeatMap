@@ -1,130 +1,75 @@
 package com.packages.heatmap
 
-import android.location.Geocoder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
-
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.compose.Circle
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import androidx.compose.ui.Modifier
 import com.opencsv.CSVReader
+import com.packages.heatmap.ui.components.SearchbarField
+import com.packages.heatmap.ui.components.ShowMap
 import com.packages.heatmap.ui.theme.HeatMapTheme
-import com.packages.heatmap.ui.tools.MySearchBar
-import com.packages.heatmap.walkscore.Area
-import com.packages.heatmap.walkscore.*
-
 import java.io.InputStreamReader
-import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val csv_file = InputStreamReader(assets.open("HeatMao.csv"))
-        val  bufferedReader = CSVReader(csv_file)
+        val csvFile = InputStreamReader(assets.open("HeatMap.csv"))
+        val  csvReader = CSVReader(csvFile)
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                0, 0
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                0, 0
+            )
+        )
         setContent {
 
             HeatMapTheme {
 
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
-
-                {
-                    Column() {
-
-                        MySearchBar()
-                        ShowMap(csvReader = bufferedReader)
-                    }
-                }
+              HeatMapTheme {
+                  HomeScreen(csvReader = csvReader)
+              }
             }
         }
     }
 }
 
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowMap(modifier: Modifier = Modifier, csvReader: CSVReader) {
-    val context = LocalContext.current
-    val geoCoder: Geocoder = Geocoder(LocalContext.current, Locale.getDefault())
-    val mapStyle: MapStyleOptions
-    if(isSystemInDarkTheme()) {
-        mapStyle = MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.dark_map_style)
-    }
-    else{
-        mapStyle = MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.light_map_style)
-    }
-    var selectedCircle: String = " "
-    val dataMap: HashMap<LatLng, Area> =  buildHashMap(csvReader)
-    val firstMapObject: Area = dataMap[dataMap.keys.first()]!!
-    var location = LatLng(firstMapObject.latitude, firstMapObject.longitude)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 12f);
-    }
-
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState,
-        properties = MapProperties(
-            minZoomPreference = 12f,
-            mapType = MapType.NORMAL,
-            mapStyleOptions = mapStyle,
-
-            isIndoorEnabled = true
-        )
-
-    ) {
-        for (key: LatLng in dataMap.keys) {
-            val walkScoreObj: Area = dataMap[key]!!
-            location = LatLng(walkScoreObj!!.latitude, walkScoreObj.longitude)
-            Marker(
-                state = MarkerState(position = location),
-                title =  geoCoder.getFromLocation(walkScoreObj.latitude, walkScoreObj.longitude, 1)!![0].getAddressLine(0),
-                snippet = "Walkscore: ${walkScoreObj.walkScore}",
-
-            )
-
-
-            Circle(
-                clickable = true,
-                center = location,
-                radius = walkScoreObj.radius,
-                strokeColor = Color.Transparent,
-                fillColor = Area.getColorByWalkscore(walkScoreObj.walkScore),
-                tag = geoCoder.getFromLocation(walkScoreObj.latitude, walkScoreObj.longitude, 1)!![0].getAddressLine(0),
-//                onClick = {it: Circle-> selectedCircle}
-            )
-
-
+fun HomeScreen(csvReader: CSVReader) {
+    HeatMapTheme {
+        Surface (
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            ShowMap(csvReader = csvReader)
+            Column (
+                modifier = Modifier.safeDrawingPadding()
+            ) {
+                Column {
+                    SearchbarField()
+                }
+                Column (
+                    modifier = Modifier.weight(1f, true),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    // Empty to push menu buttons to the bottom
+                }
+                Column {
+                    com.packages.heatmap.ui.components.NavigationBar()
+                }
+            }
         }
-        Marker(
-             state = MarkerState(position = LatLng(38.87, -77.1)),
-             title = "Marker",
-             snippet = Area.getListOfAreasThatContainPoint(LatLng(38.908647, -77.036539)).size.toString()
-        )
-
     }
-
 }
-
-

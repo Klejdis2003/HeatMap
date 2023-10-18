@@ -3,7 +3,6 @@ package com.packages.heatmap.walkscore
 import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.LatLng
-import java.util.TreeSet
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.pow
@@ -15,7 +14,7 @@ class Area (
     val latitude:Double,
     val longitude:Double,
     val walkScore: Int,
-    val radius: Double = 800.0 //meters
+    val radius: Double = 500.0 //meters
 ) {
     companion object {
         private val walkscoreColorMapping: HashMap<Int, Color> = hashMapOf(
@@ -57,19 +56,22 @@ class Area (
         return "(wk = $walkScore)"
     }
 
-    private fun containsPoint(point: LatLng): Boolean {
-
+    private fun computePointDistance(p1: LatLng, p2 : LatLng): Double{
         val R: Double = 6.371 * 10.0.pow(6.0) //radius of the erath in meters
-        val latRadians:Double = latitude * Math.PI /180.0; //latitude of center in Radians
-        val pointLatRadians:Double = point.latitude * Math.PI/180.0 //latitude of point in radians
+        val latRadians:Double = p1.latitude * Math.PI /180.0 //latitude of center in Radians
+        val pointLatRadians:Double = p2.latitude * Math.PI/180.0 //latitude of point in radians
         val latDifference: Double = latRadians - pointLatRadians //the angle difference of center and point latitudes
-        val longDifference: Double = (longitude - point.longitude) * Math.PI / 180 //the angle diff between center and point longitudees
+        val longDifference: Double = (p1.longitude - p2.longitude) * Math.PI / 180 //the angle diff between center and point longitudees
 
         val firstSinTerm: Double = sin((latDifference) / 2.0).pow(2) //first haversine
         val secondSinTerm: Double = sin((longDifference) / 2.0).pow(2) //second haversine
 
         return 2 * R * asin(
-            sqrt(firstSinTerm + cos(latRadians) * cos(pointLatRadians) * secondSinTerm)) <= radius
+            sqrt(firstSinTerm + cos(latRadians) * cos(pointLatRadians) * secondSinTerm))
+    }
 
+    private fun containsPoint(point: LatLng): Boolean {
+        val distance = computePointDistance(LatLng(this.latitude, this.longitude), point)
+        return distance <= radius
     }
 }
