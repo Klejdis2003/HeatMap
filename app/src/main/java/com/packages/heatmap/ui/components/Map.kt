@@ -22,8 +22,9 @@ import com.packages.heatmap.walkscore.buildHashMap
 
 
 @Composable
-fun ShowMap(modifier: Modifier = Modifier, csvReader: CSVReader) {
+fun ShowMap(csvReader: CSVReader) {
     val mapStyle: MapStyleOptions
+
     val dataMap: HashMap<LatLng, Area> =  buildHashMap(csvReader)
     val firstMapObject: Area = dataMap[dataMap.keys.first()]!!
     var location = LatLng(firstMapObject.latitude, firstMapObject.longitude)
