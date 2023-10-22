@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -19,6 +21,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val properties: java.util.Properties = Properties()
+        properties.load(rootProject.file("local.properties").inputStream())
+        buildConfigField(
+            "String",
+            "MAPS_API_KEY",
+            properties.getProperty("MAPS_API_KEY")
+        )
     }
 
     buildTypes {
@@ -40,6 +49,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -73,6 +83,8 @@ dependencies {
     implementation ("com.google.maps.android:maps-compose:2.14.0")
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.libraries.places:places:3.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
