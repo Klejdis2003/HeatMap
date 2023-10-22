@@ -42,7 +42,7 @@ class Area (
                 val latRadians:Double = p1.latitude * Math.PI /180.0 //latitude of center in Radians
                 val pointLatRadians:Double = p2.latitude * Math.PI/180.0 //latitude of point in radians
                 val latDifference: Double = latRadians - pointLatRadians //the angle difference of center and point latitudes
-                val longDifference: Double = (p1.longitude - p2.longitude) * Math.PI / 180 //the angle diff between center and point longitudees
+                val longDifference: Double = (p1.longitude - p2.longitude) * Math.PI / 180.0 //the angle diff between center and point longitudees
 
                 val firstSinTerm: Double = sin((latDifference) / 2.0).pow(2) //first haversine
                 val secondSinTerm: Double = sin((longDifference) / 2.0).pow(2) //second haversine

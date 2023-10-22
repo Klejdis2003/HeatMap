@@ -9,8 +9,7 @@ fun buildHashMap(csvReader: CSVReader): HashMap<LatLng, Area> {
     var area: Area;
     while (csvReader.readNext().also { nextLine = it } != null) {
         try {
-            area =
-                Area(nextLine!![1].toDouble() , nextLine!![2].toDouble(), nextLine!![3].toInt())
+            Area(nextLine!![1].toDouble() , nextLine!![2].toDouble(), nextLine!![3].toInt())
         } catch (e: Exception) {
             //do nothing
         }
