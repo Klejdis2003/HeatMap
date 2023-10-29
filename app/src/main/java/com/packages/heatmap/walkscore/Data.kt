@@ -3,17 +3,17 @@ package com.packages.heatmap.walkscore
 import com.google.android.gms.maps.model.LatLng
 import com.opencsv.CSVReader
 
-fun buildHashMap(csvReader: CSVReader): HashMap<LatLng, Area> {
+fun buildHashMap(csvReader: CSVReader): HashMap<LatLng, CircleArea> {
     //val lines = csvReader.readLines()
     var nextLine: Array<String>?
     var area: Area;
     while (csvReader.readNext().also { nextLine = it } != null) {
         try {
-            Area(nextLine!![1].toDouble() , nextLine!![2].toDouble(), nextLine!![3].toInt())
+            CircleArea(nextLine!![1].toDouble() , nextLine!![2].toDouble(), nextLine!![3].toInt())
         } catch (e: Exception) {
             //do nothing
         }
 
     }
-    return Area.mapping
+    return CircleArea.mapping
 }

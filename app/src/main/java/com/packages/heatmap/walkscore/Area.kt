@@ -9,16 +9,12 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-
-
-
-class Area (
-
-    val latitude:Double,
-    val longitude:Double,
-    val walkScore: Int,
-    val radius: Double = 500.0 //meters
+abstract class Area (
+    var latitude:Double,
+    var longitude:Double,
+    var walkScore: Int
 ) {
+    constructor() : this(0.0, 0.0, 0)
         companion object {
             private const val RED: Float = 360f
             private const val GREEN = 111f
@@ -37,7 +33,7 @@ class Area (
             )
 
             var mapping: HashMap<LatLng, Area> = HashMap()
-            private fun computePointDistance(p1: LatLng, p2 : LatLng): Double{
+            internal fun computePointDistance(p1: LatLng, p2 : LatLng): Double{
                 val R: Double = 6.371 * 10.0.pow(6.0) //radius of the erarth in meters
                 val latRadians:Double = p1.latitude * Math.PI /180.0 //latitude of center in Radians
                 val pointLatRadians:Double = p2.latitude * Math.PI/180.0 //latitude of point in radians
@@ -57,7 +53,7 @@ class Area (
             return walkscoreColorMapping[walkScoreLevel]!!
         }
 
-        fun getListOfAreasThatContainPoint(point: LatLng): ArrayList<Area> {
+        fun getListOfAreasThatContainPoint(point: LatLng, mapping: HashMap<LatLng, Area>): ArrayList<Area> {
             val results = ArrayList<Area>()
             for (key: LatLng in mapping.keys) {
                 if (mapping[key]!!.containsPoint(point)) {
@@ -78,8 +74,5 @@ class Area (
     }
 
 
-    private fun containsPoint(point: LatLng): Boolean {
-        val distance = computePointDistance(LatLng(this.latitude, this.longitude), point)
-        return distance <= radius
-    }
+    internal abstract fun containsPoint(point: LatLng): Boolean
 }

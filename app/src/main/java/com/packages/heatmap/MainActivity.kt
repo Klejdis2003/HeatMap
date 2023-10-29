@@ -20,25 +20,25 @@ import androidx.compose.ui.Modifier
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.opencsv.CSVReader
+import com.packages.heatmap.ui.components.NavigationBar
 import com.packages.heatmap.ui.components.SearchbarField
 import com.packages.heatmap.ui.components.ShowMap
 import com.packages.heatmap.ui.theme.HeatMapTheme
 import com.packages.heatmap.utils.LocationViewModel
 import java.io.InputStreamReader
-import java.util.Properties
+
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<LocationViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
-
         val csvFile = InputStreamReader(assets.open("HeatMap.csv"))
         val  csvReader = CSVReader(csvFile)
         super.onCreate(savedInstanceState)
 
         viewModel.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
-        viewModel.placesClient = Places.createClient(this);
-        viewModel.geoCoder = Geocoder(this);
+        viewModel.placesClient = Places.createClient(this)
+        viewModel.geoCoder = Geocoder(this)
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
@@ -81,7 +81,7 @@ fun HomeScreen(csvReader: CSVReader, viewModel: LocationViewModel, context: Cont
                     // Empty to push menu buttons to the bottom
                 }
                 Column {
-                    com.packages.heatmap.ui.components.NavigationBar()
+                    NavigationBar()
                 }
             }
         }
