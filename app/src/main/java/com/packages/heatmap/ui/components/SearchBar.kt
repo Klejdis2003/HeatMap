@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.packages.heatmap.MainActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,13 +38,14 @@ fun SearchbarField(viewModel: LocationViewModel, context: Context) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        var text by rememberSaveable { mutableStateOf("") }
+        val defaultText = "Search..."
+        var text by rememberSaveable { mutableStateOf("Search...") }
         var active by rememberSaveable { mutableStateOf(false) }
         SearchBar(
             query = text,
             active = active,
-            onActiveChange = {active = it},
-            onSearch = {active = false},
+            onActiveChange = { active = it; text = ""},
+            onSearch = {active = false; text = defaultText},
             onQueryChange = {text = it; viewModel.searchPlaces(it, context)},
 
         ) {
@@ -59,6 +61,9 @@ fun SearchbarField(viewModel: LocationViewModel, context: Context) {
                             onClick = {
                                 viewModel.getCoordinates(item)
                                 Log.w("Coordinates", viewModel.currentLatLong.toString())
+                                active = false
+                                text = defaultText
+                                viewModel.locationAutofill.clear()
                             }
                         ),
                     border = BorderStroke(1.dp, Color.Black),

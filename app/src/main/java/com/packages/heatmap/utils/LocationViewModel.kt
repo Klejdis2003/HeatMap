@@ -14,20 +14,26 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.opencsv.CSVReader
+import com.packages.heatmap.walkscore.Area
+import com.packages.heatmap.walkscore.CircleArea
+import com.packages.heatmap.walkscore.buildHashMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class LocationViewModel @Inject constructor() : ViewModel() {
+class LocationViewModel(csvReader: CSVReader) : ViewModel() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var placesClient: PlacesClient
     lateinit var geoCoder: Geocoder
+    val dataMap: HashMap<LatLng, CircleArea> = buildHashMap(csvReader)
+    val firstMapObject: Area = dataMap[dataMap.keys.first()]!!
 
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
 
-    var currentLatLong by mutableStateOf(LatLng(0.0, 0.0))
+    var currentLatLong by mutableStateOf(LatLng(firstMapObject.latitude, firstMapObject.longitude))
 
     @SuppressLint("MissingPermission")
     fun getCurrentLocation() {

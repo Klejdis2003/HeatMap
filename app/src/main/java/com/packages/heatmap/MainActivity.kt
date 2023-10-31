@@ -29,16 +29,19 @@ import java.io.InputStreamReader
 
 
 class MainActivity : ComponentActivity() {
-    private val viewModel by viewModels<LocationViewModel>()
+    private var csvFile: InputStreamReader? = null
+    private var csvReader: CSVReader? = null
+    private var viewModel: LocationViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-        val csvFile = InputStreamReader(assets.open("HeatMap.csv"))
-        val  csvReader = CSVReader(csvFile)
+        csvFile = InputStreamReader(assets.open("HeatMap.csv"))
+        csvReader = CSVReader(csvFile)
+        viewModel = LocationViewModel(csvReader!!)
         super.onCreate(savedInstanceState)
 
-        viewModel.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        viewModel!!.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
-        viewModel.placesClient = Places.createClient(this)
-        viewModel.geoCoder = Geocoder(this)
+        viewModel!!.placesClient = Places.createClient(this)
+        viewModel!!.geoCoder = Geocoder(this)
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
@@ -53,37 +56,38 @@ class MainActivity : ComponentActivity() {
             HeatMapTheme {
 
               HeatMapTheme {
-                  HomeScreen(csvReader = csvReader, viewModel, this)
+                  HomeScreen()
               }
+            }
+        }
+    }
+    @Composable
+    fun HomeScreen() {
+        HeatMapTheme {
+            Surface (
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                ShowMap(viewModel!!, csvReader = csvReader!!)
+                Column (
+                    modifier = Modifier.safeDrawingPadding()
+                ) {
+                    Column {
+                        SearchbarField(viewModel!!, this@MainActivity)
+                    }
+                    Column (
+                        modifier = Modifier.weight(1f, true),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        // Empty to push menu buttons to the bottom
+                    }
+                    Column {
+                        NavigationBar()
+                    }
+                }
             }
         }
     }
 }
 
-@Composable
-fun HomeScreen(csvReader: CSVReader, viewModel: LocationViewModel, context: Context) {
-    HeatMapTheme {
-        Surface (
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            ShowMap(viewModel, csvReader = csvReader)
-            Column (
-                modifier = Modifier.safeDrawingPadding()
-            ) {
-                Column {
-                    SearchbarField(viewModel, context)
-                }
-                Column (
-                    modifier = Modifier.weight(1f, true),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    // Empty to push menu buttons to the bottom
-                }
-                Column {
-                    NavigationBar()
-                }
-            }
-        }
-    }
-}
+
