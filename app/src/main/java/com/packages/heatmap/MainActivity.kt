@@ -67,7 +67,7 @@ fun HomeScreen(csvReader: CSVReader, viewModel: LocationViewModel, context: Cont
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ShowMap(csvReader = csvReader)
+            ShowMap(viewModel, csvReader = csvReader)
             Column (
                 modifier = Modifier.safeDrawingPadding()
             ) {
