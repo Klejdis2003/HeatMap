@@ -13,10 +13,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVReader
 import com.packages.heatmap.R
@@ -30,12 +33,16 @@ import com.packages.heatmap.walkscore.CircleArea
 fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
     var location = viewModel.currentLatLong
     val dataMap = viewModel.dataMap
+    var currentZoom: Float = 12f
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 12f)
+        position = CameraPosition.fromLatLngZoom(location, currentZoom)
     }
+
+    var markerPosition: LatLng = viewModel.currentLatLong
     LaunchedEffect(cameraPositionState) {
         snapshotFlow { viewModel.currentLatLong }.collect {
-            cameraPositionState.animate(update = CameraUpdateFactory.newLatLng(viewModel.currentLatLong), durationMs = 700)
+            cameraPositionState.animate(update = CameraUpdateFactory.newLatLngZoom(viewModel.currentLatLong, currentZoom), durationMs = 700)
+            currentZoom = 10f
         }
     }
     val mapStyle = if (isSystemInDarkTheme()) {
@@ -47,7 +54,6 @@ fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
-                minZoomPreference = 12f,
                 mapType = MapType.NORMAL,
                 mapStyleOptions = mapStyle,
 
@@ -69,5 +75,10 @@ fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
             )
 
         }
+        Marker(
+            state = MarkerState(position = viewModel.currentLatLong),
+            title = viewModel.currentLocationAddress,
+            snippet = viewModel.currentLocationAddress
+        )
     }
 }

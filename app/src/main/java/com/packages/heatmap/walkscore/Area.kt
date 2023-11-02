@@ -12,7 +12,8 @@ import kotlin.math.sqrt
 abstract class Area (
     var latitude:Double,
     var longitude:Double,
-    var walkScore: Int
+    var walkScore: Int,
+    val city : String = "Washington DC"
 ) {
     constructor() : this(0.0, 0.0, 0)
         companion object {

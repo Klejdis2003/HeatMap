@@ -29,6 +29,7 @@ class LocationViewModel(csvReader: CSVReader) : ViewModel() {
     lateinit var geoCoder: Geocoder
     val dataMap: HashMap<LatLng, CircleArea> = buildHashMap(csvReader)
     val firstMapObject: Area = dataMap[dataMap.keys.first()]!!
+    var currentLocationAddress: String = firstMapObject.city
 
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
