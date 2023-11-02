@@ -17,15 +17,22 @@ import androidx.compose.ui.Modifier
 import com.packages.heatmap.utils.LocationViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.heightIn
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import com.packages.heatmap.MainActivity
@@ -58,7 +65,7 @@ class SearchBar {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .sizeIn(minHeight = 80.dp)
+                            //.sizeIn(minHeight = 80.dp)
                             .padding(6.dp)
                             .clickable(
                                 enabled = true,
@@ -68,18 +75,27 @@ class SearchBar {
                                     Log.w("Coordinates", viewModel.currentLatLong.toString())
                                     active = false
                                     text = defaultText
-                                    viewModel.currentLocationAddress = item.address
                                     viewModel.locationAutofill.clear()
                                 }
                             ),
-                        border = BorderStroke(1.dp, Color.Black),
-                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
                     )
                     {
-                        Text(
-                            item.address,
-                            modifier = Modifier.padding(5.dp).align(Alignment.CenterHorizontally)
-                        )
+                        Row {
+                            Icon(
+                                Icons.Default.LocationOn, contentDescription = null,
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                                    .padding(5.dp))
+                            Text(
+                                item.address,
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .heightIn(min = 60.dp)
+                                    //.align(Alignment.CenterHorizontally)
+                                    .wrapContentHeight(),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
 
                 }
