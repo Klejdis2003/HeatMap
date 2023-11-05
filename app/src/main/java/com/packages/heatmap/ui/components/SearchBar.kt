@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import com.packages.heatmap.utils.LocationViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 
 import androidx.compose.foundation.layout.padding
@@ -26,8 +27,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarColors
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -43,7 +48,7 @@ class SearchBar {
     var active by mutableStateOf(false)
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun SearchbarField(viewModel: LocationViewModel, context: Context) {
+    fun SearchbarField(viewModel: LocationViewModel, context: Context, color: Color = MaterialTheme.colorScheme.background) {
         /*
         Function for styling and placement of the searchbar
          */
@@ -52,13 +57,16 @@ class SearchBar {
             modifier = Modifier.fillMaxWidth()
         ) {
             val defaultText = "Search..."
-            var text by rememberSaveable { mutableStateOf("Search...") }
+            var text by rememberSaveable { mutableStateOf(defaultText) }
             SearchBar(
                 query = text,
                 active = active,
                 onActiveChange = { active = it; text = "";  },
                 onSearch = { active = false; text = defaultText },
                 onQueryChange = { text = it; viewModel.searchPlaces(it, context) },
+                colors = SearchBarDefaults.colors(
+                    containerColor = color,
+                    dividerColor = MaterialTheme.colorScheme.primary)
 
                 ) {
                 for (item in viewModel.locationAutofill) {
@@ -76,15 +84,17 @@ class SearchBar {
                                     active = false
                                     text = defaultText
                                     viewModel.locationAutofill.clear()
+                                    viewModel.currentLocationAddress = item.address
                                 }
                             ),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = CardDefaults.cardColors(containerColor = color),
                     )
                     {
                         Row {
                             Icon(
                                 Icons.Default.LocationOn, contentDescription = null,
-                                modifier = Modifier.align(Alignment.CenterVertically)
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
                                     .padding(5.dp))
                             Text(
                                 item.address,
@@ -96,8 +106,9 @@ class SearchBar {
                                 fontWeight = FontWeight.Bold
                             )
                         }
-                    }
 
+                    }
+                    HorizontalDivider(modifier = Modifier.fillMaxWidth(), thickness = 0.8.dp, color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
