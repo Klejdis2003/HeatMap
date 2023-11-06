@@ -9,11 +9,12 @@ class CircleArea() : Area(){
         val mapping: HashMap<LatLng, CircleArea> = HashMap()
 
     }
-    constructor(latitude: Double, longitude: Double, walkScore: Int, address: String? = "") : this() {
+    constructor(latitude: Double, longitude: Double, walkScore: Int, address: String? = "", description: String? = "") : this() {
         this.latitude = latitude
         this.longitude = longitude
         this.walkscore = walkScore
         this.address = address
+        this.description = description
         mapping[LatLng(latitude, longitude)] = this
     }
     override fun containsPoint(point: LatLng): Boolean {

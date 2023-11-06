@@ -16,7 +16,6 @@ fun buildHashMap(csvReader: CSVReader): HashMap<LatLng, CircleArea> {
         } catch (e: Exception) {
             //do nothing
         }
-
     }
     return CircleArea.mapping
 }

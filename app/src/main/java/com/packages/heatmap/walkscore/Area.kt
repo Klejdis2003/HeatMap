@@ -22,7 +22,7 @@ abstract class Area (
     var walkscore: Int,
     val city : String = "Washington DC",
     var address: String? = "",
-    val description: String = ""
+    var description: String? = ""
 )
 
 {
@@ -104,9 +104,8 @@ abstract class Area (
                     val request = Gson().fromJson(inputStreamReader, Request::class.java)
                     inputStreamReader.close()
                     inputSystem.close()
-                    Log.w("Walkscore Data", request.walkscore.toString())
-                    Log.w("mapping", CircleArea.mapping.size.toString())
-                    CircleArea(latitude, longitude, request.walkscore, address = address)
+                    Log.w("description", request.description)
+                    CircleArea(latitude, longitude, request.walkscore, address = address, description = request.description)
                 }
                 else
                     Log.w("Connection Error", "Failed to connect")

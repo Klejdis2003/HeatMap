@@ -21,25 +21,24 @@ import androidx.compose.ui.graphics.toArgb
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.opencsv.CSVReader
+import com.packages.heatmap.ui.components.Map
 import com.packages.heatmap.ui.components.NavigationBar
 import com.packages.heatmap.ui.components.SearchBar
-import com.packages.heatmap.ui.components.ShowMap
+
 import com.packages.heatmap.ui.theme.HeatMapTheme
 import com.packages.heatmap.utils.LocationViewModel
-import com.packages.heatmap.walkscore.CircleArea
 import com.packages.heatmap.walkscore.buildHashMap
 import java.io.InputStreamReader
 
 
-class MainActivity : ComponentActivity() {
+open class MainActivity : ComponentActivity() {
     private var csvFile: InputStreamReader? = null
     private var csvReader: CSVReader? = null
     private var viewModel: LocationViewModel? = null
-    private var searchBar: SearchBar? = null
-
+    private var searchBar: SearchBar = SearchBar()
+    private var map = Map()
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
-        searchBar = SearchBar()
         csvFile = InputStreamReader(assets.open("HeatMap.csv"))
         csvReader = CSVReader(csvFile)
         val dataMap = buildHashMap(csvReader!!)
@@ -67,22 +66,27 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen() {
     val defaultColor = MaterialTheme.colorScheme.surfaceContainer
     val color: Color = when{
-        searchBar!!.active ->  defaultColor
+        searchBar.active || map.active ->  defaultColor
         else -> Color.Transparent
     }
-    window.statusBarColor = color.toArgb()
-    window.navigationBarColor = color.toArgb()
+    window.statusBarColor = if(searchBar.active){
+        defaultColor.toArgb()
+    } else {
+        Color.Transparent.toArgb()
+    }
+
+    window.navigationBarColor =  color.toArgb()
 
     Surface (
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ShowMap(viewModel!!, csvReader = csvReader!!)
+            map.ShowMap(viewModel!!, csvReader = csvReader!!)
             Column (
                 modifier = Modifier.safeDrawingPadding()
             ) {
                 Column {
-                    searchBar!!.SearchbarField(viewModel!!, this@MainActivity, color = defaultColor)
+                    searchBar.SearchbarField(viewModel!!, this@MainActivity, color = defaultColor)
                 }
                 Column (
                     modifier = Modifier.weight(1f, true),

@@ -26,11 +26,8 @@ class LocationViewModel() : ViewModel() {
     lateinit var geoCoder: Geocoder
     val dataMap = CircleArea.mapping
     val firstMapObject: CircleArea = dataMap[dataMap.keys.first()]!!
-    //var currentLocation: MutableState<CircleArea> = mutableStateOf(firstMapObject)
-
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
-
     var currentLatLong by mutableStateOf(LatLng(firstMapObject.latitude, firstMapObject.longitude))
 
     @SuppressLint("MissingPermission")
