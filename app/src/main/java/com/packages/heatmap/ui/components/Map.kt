@@ -13,7 +13,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -26,23 +25,26 @@ import com.packages.heatmap.R
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.CircleArea
+import kotlinx.coroutines.flow.collectLatest
 
 
 @SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
     var location = viewModel.currentLatLong
-    val dataMap = viewModel.dataMap
     var currentZoom: Float = 12f
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, currentZoom)
     }
-
     var markerPosition: LatLng = viewModel.currentLatLong
     LaunchedEffect(cameraPositionState) {
-        snapshotFlow { viewModel.currentLatLong }.collect {
-            cameraPositionState.animate(update = CameraUpdateFactory.newLatLngZoom(viewModel.currentLatLong, currentZoom), durationMs = 700)
-            currentZoom = 10f
+        snapshotFlow { viewModel.currentLatLong }.collectLatest {
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newLatLng(
+                    viewModel.currentLatLong
+                ), durationMs = 700
+            )
+            currentZoom = 12f
         }
     }
     val mapStyle = if (isSystemInDarkTheme()) {
@@ -56,29 +58,34 @@ fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
             properties = MapProperties(
                 mapType = MapType.NORMAL,
                 mapStyleOptions = mapStyle,
-
                 isIndoorEnabled = true
-            )
-
+            ),
+            onMapLongClick = {
+                currentZoom = 12f
+                viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
+                viewModel.update()
+            }
         )
     {
-        for (key: LatLng in dataMap.keys) {
-            val walkScoreObj: CircleArea = dataMap[key]!!
+        for (key: LatLng in viewModel.dataMap.keys) {
+            val walkScoreObj: CircleArea = viewModel.dataMap[key]!!
             location = LatLng(walkScoreObj.latitude, walkScoreObj.longitude)
-
             Circle(
                 center = location,
                 radius = walkScoreObj.radius,
                 strokeColor = Color.Transparent,
-                fillColor = Area.getColorByWalkscore(walkScoreObj.walkScore),
+                fillColor = Area.getColorByWalkscore(walkScoreObj.walkscore),
                 tag = walkScoreObj,
             )
 
         }
         Marker(
             state = MarkerState(position = viewModel.currentLatLong),
-            title = viewModel.currentLocationAddress,
-            snippet = viewModel.currentLocationAddress
+            title = CircleArea.mapping[viewModel.currentLatLong]?.address,
+            snippet = when (CircleArea.mapping[viewModel.currentLatLong]?.walkscore) {
+                0 -> "Walkscore: No Data"
+                else -> "Walkscore: ${CircleArea.mapping[viewModel.currentLatLong]?.walkscore}"
+            }
         )
     }
 }

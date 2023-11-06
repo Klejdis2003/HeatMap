@@ -26,6 +26,8 @@ import com.packages.heatmap.ui.components.SearchBar
 import com.packages.heatmap.ui.components.ShowMap
 import com.packages.heatmap.ui.theme.HeatMapTheme
 import com.packages.heatmap.utils.LocationViewModel
+import com.packages.heatmap.walkscore.CircleArea
+import com.packages.heatmap.walkscore.buildHashMap
 import java.io.InputStreamReader
 
 
@@ -40,13 +42,19 @@ class MainActivity : ComponentActivity() {
         searchBar = SearchBar()
         csvFile = InputStreamReader(assets.open("HeatMap.csv"))
         csvReader = CSVReader(csvFile)
-        viewModel = LocationViewModel(csvReader!!)
+        val dataMap = buildHashMap(csvReader!!)
+        viewModel = LocationViewModel()
         super.onCreate(savedInstanceState)
-
         viewModel!!.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
         viewModel!!.placesClient = Places.createClient(this)
         viewModel!!.geoCoder = Geocoder(this)
+        viewModel!!.firstMapObject.address = viewModel!!.geoCoder.getFromLocation(
+            viewModel!!.firstMapObject.latitude,
+            viewModel!!.firstMapObject.longitude,
+            1
+        )?.get(0)?.getAddressLine(0)
+
         enableEdgeToEdge()
         setContent {
             HeatMapTheme { HomeScreen()
@@ -65,7 +73,7 @@ fun HomeScreen() {
     window.statusBarColor = color.toArgb()
     window.navigationBarColor = color.toArgb()
 
-        Surface (
+    Surface (
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {

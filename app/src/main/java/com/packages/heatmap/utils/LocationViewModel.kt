@@ -14,22 +14,19 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.opencsv.CSVReader
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.CircleArea
-import com.packages.heatmap.walkscore.buildHashMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
-class LocationViewModel(csvReader: CSVReader) : ViewModel() {
+class LocationViewModel() : ViewModel() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var placesClient: PlacesClient
     lateinit var geoCoder: Geocoder
-    val dataMap: HashMap<LatLng, CircleArea> = buildHashMap(csvReader)
-    val firstMapObject: Area = dataMap[dataMap.keys.first()]!!
-    var currentLocationAddress: String = firstMapObject.city
+    val dataMap = CircleArea.mapping
+    val firstMapObject: CircleArea = dataMap[dataMap.keys.first()]!!
+    //var currentLocation: MutableState<CircleArea> = mutableStateOf(firstMapObject)
 
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
@@ -82,9 +79,24 @@ class LocationViewModel(csvReader: CSVReader) : ViewModel() {
         placesClient.fetchPlace(request).addOnSuccessListener {
             if (it != null) {
                 currentLatLong = it.place.latLng!!
+                update(result.address)
             }
         }.addOnFailureListener {
             it.printStackTrace()
         }
+    }
+    fun update(result: String? = null){
+        val address: String = result ?: try{
+                geoCoder.getFromLocation(currentLatLong.latitude, currentLatLong.longitude, 1)?.get(0)?.getAddressLine(0)!!
+            } catch(e: Exception){
+                "Could not locate"
+            }
+        val thread = Area.getAreaFromAPIRequest(
+            currentLatLong.latitude,
+            currentLatLong.longitude,
+            address
+        )
+        thread.start()
+        thread.join()
     }
 }
