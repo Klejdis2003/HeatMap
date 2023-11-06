@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -47,9 +48,9 @@ import kotlinx.coroutines.flow.collectLatest
 @SuppressLint("FlowOperatorInvokedInComposition")
 
 class Map() {
-    val TITLE_FONT_SIZE: TextUnit = 20.sp
-    val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
-    val CONTENT_PADDING = 13.dp
+    private val TITLE_FONT_SIZE: TextUnit = 20.sp
+    private val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
+    private val CONTENT_PADDING = 13.dp
 
     var active by mutableStateOf(false)
     @Composable
@@ -61,6 +62,7 @@ class Map() {
             position = CameraPosition.fromLatLngZoom(location, currentZoom)
         }
         var markerPosition: LatLng = viewModel.currentLatLong
+        var currentArea by remember{mutableStateOf(CircleArea.mapping[viewModel.currentLatLong])}
         LaunchedEffect(cameraPositionState) {
             snapshotFlow { viewModel.currentLatLong }.collectLatest {
                 cameraPositionState.animate(
@@ -91,7 +93,6 @@ class Map() {
             }
         )
         {
-            val currentArea = CircleArea.mapping[viewModel.currentLatLong]
             val context = LocalContext.current
             val sheetState = rememberModalBottomSheetState()
             for (key: LatLng in viewModel.dataMap.keys) {
@@ -102,8 +103,11 @@ class Map() {
                     radius = walkScoreObj.radius,
                     strokeColor = Color.Transparent,
                     fillColor = Area.getColorByWalkscore(walkScoreObj.walkscore),
+                    tag = walkScoreObj,
+                    clickable = true,
                     onClick = {
                         active = true
+                        currentArea = it.tag as CircleArea
                     }
                 )
             }
@@ -147,7 +151,7 @@ class Map() {
                         {
                             Text("Description: ", fontSize = SUB_TITLE_FONT_SIZE, fontWeight = FontWeight.Bold)
                             if (currentArea?.description != null)
-                                Text(currentArea.description!!)
+                                Text(currentArea?.description!!)
                         }
                     }
                     else
