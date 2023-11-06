@@ -104,7 +104,6 @@ abstract class Area (
                     val request = Gson().fromJson(inputStreamReader, Request::class.java)
                     inputStreamReader.close()
                     inputSystem.close()
-                    Log.w("description", request.description)
                     CircleArea(latitude, longitude, request.walkscore, address = address, description = request.description)
                 }
                 else

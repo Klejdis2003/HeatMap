@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -46,6 +47,10 @@ import kotlinx.coroutines.flow.collectLatest
 @SuppressLint("FlowOperatorInvokedInComposition")
 
 class Map() {
+    val TITLE_FONT_SIZE: TextUnit = 20.sp
+    val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
+    val CONTENT_PADDING = 13.dp
+
     var active by mutableStateOf(false)
     @Composable
     fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
@@ -126,22 +131,27 @@ class Map() {
                     Row()
                     {
                         Text(
-                            text = currentArea?.address!!,
-                            fontSize = 20.sp,
+                            text = currentArea?.address?:"No Data",
+                            fontSize = TITLE_FONT_SIZE,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(3.dp, 20.dp)
                         )
                     }
-                    Row(modifier = Modifier.padding(0.dp, 13.dp))
-                    {
-                        Text("Walkscore: ", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        Text(currentArea?.walkscore.toString())
+                    if(currentArea?.walkscore != 0) {
+                        Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
+                        {
+                            Text("Walkscore: ", fontSize = SUB_TITLE_FONT_SIZE, fontWeight = FontWeight.Bold)
+                            Text(currentArea?.walkscore.toString())
+                        }
+                        Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
+                        {
+                            Text("Description: ", fontSize = SUB_TITLE_FONT_SIZE, fontWeight = FontWeight.Bold)
+                            if (currentArea?.description != null)
+                                Text(currentArea.description!!)
+                        }
                     }
-                    Row(modifier = Modifier.padding(0.dp, 13.dp))
-                    {
-                        Text("Description: ", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                        Text(currentArea?.description!!)
-                    }
+                    else
+                        Text("No walkscore data for this place ", fontSize = SUB_TITLE_FONT_SIZE)
                 }
 
             }
