@@ -81,7 +81,7 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            map.ShowMap(viewModel!!, csvReader = csvReader!!)
+            map.ShowMap(viewModel!!)
             Column (
                 modifier = Modifier.safeDrawingPadding()
             ) {

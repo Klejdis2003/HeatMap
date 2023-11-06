@@ -47,22 +47,22 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("FlowOperatorInvokedInComposition")
 
-class Map() {
+class Map {
     private val TITLE_FONT_SIZE: TextUnit = 20.sp
     private val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
     private val CONTENT_PADDING = 13.dp
 
     var active by mutableStateOf(false)
+
     @Composable
-    fun ShowMap(viewModel: LocationViewModel, csvReader: CSVReader) {
+    fun ShowMap(viewModel: LocationViewModel) {
 
         var location = viewModel.currentLatLong
-        var currentZoom: Float = 12f
+        var currentZoom = 12f
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(location, currentZoom)
         }
-        var markerPosition: LatLng = viewModel.currentLatLong
-        var currentArea by remember{mutableStateOf(CircleArea.mapping[viewModel.currentLatLong])}
+        var currentArea by remember { mutableStateOf(CircleArea.mapping[viewModel.currentLatLong]) }
         LaunchedEffect(cameraPositionState) {
             snapshotFlow { viewModel.currentLatLong }.collectLatest {
                 cameraPositionState.animate(
@@ -93,7 +93,6 @@ class Map() {
             }
         )
         {
-            val context = LocalContext.current
             val sheetState = rememberModalBottomSheetState()
             for (key: LatLng in viewModel.dataMap.keys) {
                 val walkScoreObj: CircleArea = viewModel.dataMap[key]!!
@@ -120,6 +119,7 @@ class Map() {
                     else -> "Walkscore: ${currentArea?.walkscore}"
                 },
                 onClick = {
+                    currentArea = viewModel.dataMap[viewModel.currentLatLong]
                     active = true
                     true
                 }
@@ -135,27 +135,34 @@ class Map() {
                     Row()
                     {
                         Text(
-                            text = currentArea?.address?:"No Data",
+                            text = currentArea?.address ?: "No Data",
                             fontSize = TITLE_FONT_SIZE,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(3.dp, 20.dp)
                         )
                     }
-                    if(currentArea?.walkscore != 0) {
+                    if (currentArea?.walkscore != 0) {
                         Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
                         {
-                            Text("Walkscore: ", fontSize = SUB_TITLE_FONT_SIZE, fontWeight = FontWeight.Bold)
+                            Text(
+                                "Walkscore: ",
+                                fontSize = SUB_TITLE_FONT_SIZE,
+                                fontWeight = FontWeight.Bold
+                            )
                             Text(currentArea?.walkscore.toString())
                         }
                         Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
                         {
-                            Text("Description: ", fontSize = SUB_TITLE_FONT_SIZE, fontWeight = FontWeight.Bold)
+                            Text(
+                                "Description: ",
+                                fontSize = SUB_TITLE_FONT_SIZE,
+                                fontWeight = FontWeight.Bold
+                            )
                             if (currentArea?.description != null)
                                 Text(currentArea?.description!!)
                         }
-                    }
-                    else
-                        Text("No walkscore data for this place ", fontSize = SUB_TITLE_FONT_SIZE)
+                    } else
+                        Text("No walkscore data for this place. ", fontSize = SUB_TITLE_FONT_SIZE)
                 }
 
             }
