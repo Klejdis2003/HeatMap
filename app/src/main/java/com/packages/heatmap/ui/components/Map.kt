@@ -1,11 +1,22 @@
 package com.packages.heatmap.ui.components
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SearchBarDefaults
@@ -18,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -36,7 +48,6 @@ import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.opencsv.CSVReader
 import com.packages.heatmap.R
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
@@ -56,7 +67,7 @@ class Map {
 
     @Composable
     fun ShowMap(viewModel: LocationViewModel) {
-
+        val context = LocalContext.current
         var location = viewModel.currentLatLong
         var currentZoom = 12f
         val cameraPositionState = rememberCameraPositionState {
@@ -113,15 +124,12 @@ class Map {
 
             Marker(
                 state = MarkerState(position = viewModel.currentLatLong),
-                title = CircleArea.mapping[viewModel.currentLatLong]?.address,
-                snippet = when (currentArea?.walkscore) {
-                    0 -> "Walkscore: No Data"
-                    else -> "Walkscore: ${currentArea?.walkscore}"
-                },
+                title = "",
+                snippet = "",
                 onClick = {
                     currentArea = viewModel.dataMap[viewModel.currentLatLong]
                     active = true
-                    true
+                    false
                 }
             )
             if (active) {
@@ -129,10 +137,11 @@ class Map {
                     onDismissRequest = { active = false },
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     sheetState = sheetState,
-                    tonalElevation = SearchBarDefaults.TonalElevation
+                    tonalElevation = SearchBarDefaults.TonalElevation,
+                    modifier = Modifier.defaultMinSize()
                 )
                 {
-                    Row()
+                    Row(modifier = Modifier.wrapContentSize())
                     {
                         Text(
                             text = currentArea?.address ?: "No Data",
@@ -141,32 +150,68 @@ class Map {
                             modifier = Modifier.padding(3.dp, 20.dp)
                         )
                     }
-                    if (currentArea?.walkscore != 0) {
-                        Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
-                        {
-                            Text(
-                                "Walkscore: ",
-                                fontSize = SUB_TITLE_FONT_SIZE,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(currentArea?.walkscore.toString())
+
+                        if (currentArea?.walkscore != 0) {
+                            Row(modifier = Modifier.wrapContentSize()){
+                                Column() {
+                                    Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
+                                    {
+                                        Text(
+                                            "Walkscore: ",
+                                            fontSize = SUB_TITLE_FONT_SIZE,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        Text(currentArea?.walkscore.toString())
+                                    }
+                                    Row(
+                                        modifier = Modifier.padding(0.dp, CONTENT_PADDING)
+                                            .wrapContentSize()
+                                    )
+                                    {
+                                        Text(
+                                            "Description: ",
+                                            fontSize = SUB_TITLE_FONT_SIZE,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        if (currentArea?.description != null)
+                                            Text(currentArea?.description!!)
+                                    }
+                                }
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.Bottom)
+                                        .padding(8.dp, CONTENT_PADDING)
+                                )
+                                {
+                                    FloatingActionButton(
+                                        content = {
+                                            Icon(
+                                                Icons.Outlined.Place,
+                                                contentDescription = null,
+                                                modifier = Modifier.padding(8.dp)
+                                            )
+                                        },
+                                        onClick = {
+                                            val uri =
+                                                "google.navigation:q=${currentArea?.latitude},${currentArea?.longitude}"
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                                            intent.setPackage("com.google.android.apps.maps")
+                                            context.startActivity(intent)
+                                        },
+                                        modifier = Modifier.align(Alignment.End),
+                                        shape = ButtonDefaults.shape
+                                    )
+                                }
+                            }
+
                         }
-                        Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
-                        {
-                            Text(
-                                "Description: ",
-                                fontSize = SUB_TITLE_FONT_SIZE,
-                                fontWeight = FontWeight.Bold
-                            )
-                            if (currentArea?.description != null)
-                                Text(currentArea?.description!!)
-                        }
-                    } else
-                        Text("No walkscore data for this place. ", fontSize = SUB_TITLE_FONT_SIZE)
+
+                        else
+                            Text("No walkscore data for this place. ", fontSize = SUB_TITLE_FONT_SIZE)
+
                 }
-
             }
-
         }
     }
 }
