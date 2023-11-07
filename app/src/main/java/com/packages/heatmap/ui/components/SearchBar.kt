@@ -73,7 +73,7 @@ class SearchBar {
                                     text = defaultText
                                     viewModel.locationAutofill.clear()
                                     //Log.w("Current Location", viewModel.currentLocation.toString())
-                                    Log.w("Curren lat/lng", "Lat: ${viewModel.currentLatLong.latitude}, Lng: ${viewModel.currentLatLong.longitude}")
+                                    Log.w("Current lat/lng", "Lat: ${viewModel.currentLatLong.latitude}, Lng: ${viewModel.currentLatLong.longitude}")
                                 }
                             ),
                         colors = CardDefaults.cardColors(containerColor = color),

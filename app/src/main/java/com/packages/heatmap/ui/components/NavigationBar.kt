@@ -1,23 +1,28 @@
 package com.packages.heatmap.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.ui.res.painterResource
+import com.packages.heatmap.R
 
 @Composable
 fun NavigationBar() {
     /*
     Function for styling and placement of the navigation bar
      */
-    Row (
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+
+    NavigationBar (
+        containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
-        Text("About")
-        Text("Settings")
-        Text("Help")
+        NavigationBarItem(selected = false,
+            onClick = { /*TODO*/ },
+            icon = { Icon(painterResource(R.drawable.baseline_dark_mode_24), null) },
+            label = { Text(text = "Dark Mode") }
+        )
+
     }
 }

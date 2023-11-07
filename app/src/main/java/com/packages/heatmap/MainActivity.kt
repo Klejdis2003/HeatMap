@@ -75,7 +75,7 @@ fun HomeScreen() {
         Color.Transparent.toArgb()
     }
 
-    window.navigationBarColor =  color.toArgb()
+    window.navigationBarColor = defaultColor.toArgb()
 
     Surface (
             modifier = Modifier.fillMaxSize(),

@@ -154,7 +154,7 @@ class Map {
                         if (currentArea?.walkscore != 0) {
                             Row(modifier = Modifier.wrapContentSize()){
                                 Column() {
-                                    Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
+                                    Row(modifier = Modifier.padding(5.dp, CONTENT_PADDING))
                                     {
                                         Text(
                                             "Walkscore: ",
@@ -164,7 +164,7 @@ class Map {
                                         Text(currentArea?.walkscore.toString())
                                     }
                                     Row(
-                                        modifier = Modifier.padding(0.dp, CONTENT_PADDING)
+                                        modifier = Modifier.padding(5.dp, CONTENT_PADDING)
                                             .wrapContentSize()
                                     )
                                     {
