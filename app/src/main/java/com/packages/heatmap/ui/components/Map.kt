@@ -66,7 +66,7 @@ class Map {
     var active by mutableStateOf(false)
 
     @Composable
-    fun ShowMap(viewModel: LocationViewModel) {
+    fun ShowMap(viewModel: LocationViewModel, darkTheme: Boolean) {
         val context = LocalContext.current
         var location = viewModel.currentLatLong
         var currentZoom = 12f
@@ -84,7 +84,7 @@ class Map {
                 currentZoom = 12f
             }
         }
-        val mapStyle = if (isSystemInDarkTheme()) {
+        val mapStyle = if (darkTheme) {
             MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.dark_map_style)
         } else {
             MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.light_map_style)

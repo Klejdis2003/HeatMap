@@ -39,6 +39,7 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+
 @Composable
 fun HeatMapTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
