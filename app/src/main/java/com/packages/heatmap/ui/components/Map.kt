@@ -25,6 +25,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -69,7 +70,7 @@ class Map {
     fun ShowMap(viewModel: LocationViewModel) {
         val context = LocalContext.current
         var location = viewModel.currentLatLong
-        var currentZoom = 12f
+        var currentZoom by remember{ mutableFloatStateOf(12f) }
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(location, currentZoom)
         }
@@ -77,11 +78,12 @@ class Map {
         LaunchedEffect(cameraPositionState) {
             snapshotFlow { viewModel.currentLatLong }.collectLatest {
                 cameraPositionState.animate(
-                    update = CameraUpdateFactory.newLatLng(
-                        viewModel.currentLatLong
+                    update = CameraUpdateFactory.newLatLngZoom(
+                        viewModel.currentLatLong,
+                        currentZoom
                     ), durationMs = 700
                 )
-                currentZoom = 12f
+                currentZoom = 10f
             }
         }
         val mapStyle = if (isSystemInDarkTheme()) {
