@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -58,6 +59,12 @@ fun NavigationBar(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
                     Switch(
                         checked = darkTheme,
                         onCheckedChange = { onThemeUpdated() },
+                        colors = SwitchDefaults.colors(
+                            uncheckedBorderColor = MaterialTheme.colorScheme.primary,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.inversePrimary,
+                            uncheckedIconColor = MaterialTheme.colorScheme.primary
+                        ),
                         thumbContent = {
                             Box (
                                 Modifier.rotate(-90f)
