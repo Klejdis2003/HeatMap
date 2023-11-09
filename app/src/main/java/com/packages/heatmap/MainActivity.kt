@@ -85,7 +85,7 @@ fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
         Color.Transparent.toArgb()
     }
 
-    window.navigationBarColor = defaultColor.toArgb()
+    window.navigationBarColor = color.toArgb()
 
     Surface (
             modifier = Modifier.fillMaxSize(),
