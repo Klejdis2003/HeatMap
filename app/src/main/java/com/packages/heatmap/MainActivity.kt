@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.opencsv.CSVReader
+import com.packages.heatmap.ui.components.DarkThemeSwitch
 import com.packages.heatmap.ui.components.Map
 import com.packages.heatmap.ui.components.NavigationBar
 import com.packages.heatmap.ui.components.SearchBar
@@ -105,7 +106,7 @@ fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
                     // Empty to push menu buttons to the bottom
                 }
                 Column {
-                    NavigationBar(darkTheme, onThemeUpdated)
+                    DarkThemeSwitch(darkTheme, onThemeUpdated)
                 }
             }
         }
