@@ -52,7 +52,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.packages.heatmap.R
-import com.packages.heatmap.ui.components.Component.Companion.active
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.CircleArea
@@ -71,7 +70,6 @@ class Map {
 
     @Composable
     fun ShowMap(viewModel: LocationViewModel) {
-        val context = LocalContext.current
         var location = viewModel.currentLatLong
         var currentZoom by remember { mutableFloatStateOf(12f) }
         val cameraPositionState = rememberCameraPositionState {
@@ -102,7 +100,7 @@ class Map {
                 mapStyleOptions = mapStyle,
                 isIndoorEnabled = true
             ),
-            uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
+            uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false, mapToolbarEnabled = true),
             onMapLongClick = {
                 currentZoom = when {
                     cameraPositionState.position.zoom < 16f -> 16f
@@ -164,14 +162,14 @@ class Map {
             Row(modifier = Modifier.wrapContentSize().padding(12.dp, 0.dp))
             {
                 Text(
-                    text = currentArea?.address ?: "No Data",
+                    text = currentArea.address ?: "No Data",
                     fontSize = TITLE_FONT_SIZE,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(3.dp, 20.dp)
                 )
             }
 
-            if (currentArea?.walkscore != 0) {
+            if (currentArea.walkscore != 0) {
                 Row(modifier = Modifier.wrapContentSize().padding(12.dp, 4.dp)) {
                     Column {
                         Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
@@ -193,8 +191,8 @@ class Map {
                                 fontSize = SUB_TITLE_FONT_SIZE,
                                 fontWeight = FontWeight.Bold
                             )
-                            if (currentArea?.description != null)
-                                Text(currentArea?.description!!)
+                            if (currentArea.description != null)
+                                Text(currentArea.description!!)
                         }
                     }
                     Column(
@@ -214,7 +212,7 @@ class Map {
                             },
                             onClick = {
                                 val uri =
-                                    "google.navigation:q=${currentArea?.latitude},${currentArea?.longitude}"
+                                    "google.navigation:q=${currentArea.latitude},${currentArea.longitude}"
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                                 intent.setPackage("com.google.android.apps.maps")
                                 context.startActivity(intent)

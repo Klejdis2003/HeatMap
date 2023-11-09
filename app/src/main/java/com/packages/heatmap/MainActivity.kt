@@ -31,7 +31,7 @@ import com.packages.heatmap.walkscore.buildHashMap
 import java.io.InputStreamReader
 
 
-open class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     private var csvFile: InputStreamReader? = null
     private var csvReader: CSVReader? = null
     private var viewModel: LocationViewModel? = null
