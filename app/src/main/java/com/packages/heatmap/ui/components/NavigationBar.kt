@@ -15,10 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.packages.heatmap.R
@@ -39,37 +42,40 @@ fun NavigationBar(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
             Modifier.padding(10.dp)
         ) {
             Column(
-                Modifier.padding(5.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+//                Box(
+//                    Modifier.padding(5.dp)
+//                )
+//                { Icon(painterResource(R.drawable.baseline_light_mode_24), null) }
                 Box(
-                    Modifier.padding(5.dp)
-                )
-                { Icon(painterResource(R.drawable.baseline_light_mode_24), null) }
-                Box(
-                    Modifier.padding(5.dp)
+                    Modifier
+                        .padding(3.dp, 10.dp)
+                        .rotate(90f)
                 )
                 {
                     Switch(
                         checked = darkTheme,
                         onCheckedChange = { onThemeUpdated() },
-                        Modifier.rotate(90f),
-//                    thumbContent = {
-//                        if (darkTheme) {
-//                            Icon(painterResource(R.drawable.baseline_dark_mode_24), null)
-//                        }
-//                        else {
-//
-//                            Icon(painterResource(R.drawable.baseline_light_mode_24), null)
-//                        }
-//                    }
+                        thumbContent = {
+                            Box (
+                                Modifier.rotate(-90f)
+                            ) {
+                                if (darkTheme) {
+                                    Icon(painterResource(R.drawable.baseline_dark_mode_24), null)
+                                } else {
+
+                                    Icon(painterResource(R.drawable.baseline_light_mode_24), null)
+                                }
+                            }
+                        }
                     )
                 }
-                Box(
-                    Modifier.padding(5.dp)
-                )
-                { Icon(painterResource(R.drawable.baseline_dark_mode_24), null) }
+//                Box(
+//                    Modifier.padding(5.dp)
+//                )
+//                { Icon(painterResource(R.drawable.baseline_dark_mode_24), null) }
             }
         }
     }
