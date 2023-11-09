@@ -46,6 +46,7 @@ import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -99,8 +100,12 @@ class Map {
                 mapStyleOptions = mapStyle,
                 isIndoorEnabled = true
             ),
+            uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
-                currentZoom = 12f
+                currentZoom = when{
+                    cameraPositionState.position.zoom < 16f -> 16f
+                    else -> cameraPositionState.position.zoom
+                }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
                 viewModel.update()
             }
@@ -118,6 +123,9 @@ class Map {
                     tag = walkScoreObj,
                     clickable = true,
                     onClick = {
+                        val obj = it.tag as CircleArea
+                        if(obj.address == "")
+                             obj.address = viewModel.geoCoder.getFromLocation(obj.latitude, obj.longitude, 1)?.get(0)?.getAddressLine(0)!!
                         active = true
                         currentArea = it.tag as CircleArea
                     }
@@ -126,12 +134,10 @@ class Map {
 
             Marker(
                 state = MarkerState(position = viewModel.currentLatLong),
-                title = "",
-                snippet = "",
                 onClick = {
                     currentArea = viewModel.dataMap[viewModel.currentLatLong]
                     active = true
-                    false
+                    true
                 }
             )
             if (active) {

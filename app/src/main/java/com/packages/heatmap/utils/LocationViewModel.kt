@@ -86,7 +86,7 @@ class LocationViewModel : ViewModel() {
         val address: String = result ?: try{
                 geoCoder.getFromLocation(currentLatLong.latitude, currentLatLong.longitude, 1)?.get(0)?.getAddressLine(0)!!
             } catch(e: Exception){
-                "Could not locate"
+                "Could not locate."
             }
         val thread = Area.getAreaFromAPIRequest(
             currentLatLong.latitude,

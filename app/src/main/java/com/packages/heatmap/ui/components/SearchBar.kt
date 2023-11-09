@@ -43,13 +43,13 @@ class SearchBar {
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            val defaultText = "Search..."
-            var text by rememberSaveable { mutableStateOf(defaultText) }
+            var text by rememberSaveable { mutableStateOf("") }
             SearchBar(
                 query = text,
                 active = active,
-                onActiveChange = { active = it; text = "";  },
-                onSearch = { active = false; text = defaultText},
+                placeholder = {Text("Search...")},
+                onActiveChange = { active = it;  },
+                onSearch = { active = false; text = ""},
                 onQueryChange = { text = it; viewModel.searchPlaces(it, context) },
                 colors = SearchBarDefaults.colors(
                     containerColor = color,
@@ -70,7 +70,7 @@ class SearchBar {
                                     viewModel.getCoordinates(item)
                                     Log.w("Coordinates", viewModel.currentLatLong.toString())
                                     active = false
-                                    text = defaultText
+                                    text = ""
                                     viewModel.locationAutofill.clear()
                                     //Log.w("Current Location", viewModel.currentLocation.toString())
                                     Log.w("Curren lat/lng", "Lat: ${viewModel.currentLatLong.latitude}, Lng: ${viewModel.currentLatLong.longitude}")

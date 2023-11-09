@@ -22,7 +22,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.opencsv.CSVReader
 import com.packages.heatmap.ui.components.Map
-import com.packages.heatmap.ui.components.NavigationBar
+
 import com.packages.heatmap.ui.components.SearchBar
 
 import com.packages.heatmap.ui.theme.HeatMapTheme
@@ -87,15 +87,6 @@ fun HomeScreen() {
             ) {
                 Column {
                     searchBar.SearchbarField(viewModel!!, this@MainActivity, color = defaultColor)
-                }
-                Column (
-                    modifier = Modifier.weight(1f, true),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    // Empty to push menu buttons to the bottom
-                }
-                Column {
-                    NavigationBar()
                 }
             }
         }
