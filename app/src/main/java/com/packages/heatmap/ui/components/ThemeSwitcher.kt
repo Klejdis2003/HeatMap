@@ -37,10 +37,6 @@ fun DarkThemeSwitch(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-//                Box(
-//                    Modifier.padding(5.dp)
-//                )
-//                { Icon(painterResource(R.drawable.baseline_light_mode_24), null) }
                 Box(
                     Modifier
                         .padding(3.dp, 10.dp)
@@ -70,10 +66,6 @@ fun DarkThemeSwitch(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
                         }
                     )
                 }
-//                Box(
-//                    Modifier.padding(5.dp)
-//                )
-//                { Icon(painterResource(R.drawable.baseline_dark_mode_24), null) }
             }
         }
     }
