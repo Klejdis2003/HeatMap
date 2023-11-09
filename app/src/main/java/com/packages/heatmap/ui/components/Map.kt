@@ -126,12 +126,10 @@ class Map {
 
             Marker(
                 state = MarkerState(position = viewModel.currentLatLong),
-                title = "",
-                snippet = "",
                 onClick = {
                     currentArea = viewModel.dataMap[viewModel.currentLatLong]
                     active = true
-                    false
+                    true
                 }
             )
             if (active) {

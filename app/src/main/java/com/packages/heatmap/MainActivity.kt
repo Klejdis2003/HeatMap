@@ -28,7 +28,6 @@ import com.google.android.libraries.places.api.Places
 import com.opencsv.CSVReader
 import com.packages.heatmap.ui.components.DarkThemeSwitch
 import com.packages.heatmap.ui.components.Map
-import com.packages.heatmap.ui.components.NavigationBar
 import com.packages.heatmap.ui.components.SearchBar
 import com.packages.heatmap.ui.theme.HeatMapTheme
 import com.packages.heatmap.utils.LocationViewModel
@@ -61,13 +60,15 @@ open class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            var darkTheme by remember { mutableStateOf(true)}
+            val systemTheme:Boolean = isSystemInDarkTheme()
+            var darkTheme by remember { mutableStateOf(systemTheme)}
             HeatMapTheme (
                 darkTheme = darkTheme
-            ) { HomeScreen(
-                darkTheme = darkTheme,
-                onThemeUpdated = {darkTheme = !darkTheme}
-            )
+            ) {
+                HomeScreen (
+                    darkTheme = darkTheme,
+                    onThemeUpdated = {darkTheme = !darkTheme}
+                )
             }
         }
     }
