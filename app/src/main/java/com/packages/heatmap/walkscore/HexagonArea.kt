@@ -25,12 +25,12 @@ class HexagonArea() : Area() {
          */
         val points: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
         val degreeRadius = radius / 111111 // 111111 meters is approx equiv to 1 degree
-        points[0] = LatLng(latitude + (degreeRadius), longitude)
-        points[1] = LatLng(latitude + (degreeRadius/2), longitude - ((sqrt(3.0) * degreeRadius)/2))
-        points[2] = LatLng(latitude - (degreeRadius/2), longitude - ((sqrt(3.0) * degreeRadius)/2))
-        points[3] = LatLng(latitude - degreeRadius, longitude)
-        points[4] = LatLng(latitude - (degreeRadius/2), longitude + ((sqrt(3.0) * degreeRadius)/2))
-        points[5] = LatLng(latitude + (degreeRadius/2), longitude + ((sqrt(3.0) * degreeRadius)/2))
+        points[0] = LatLng(latitude, longitude + (degreeRadius))
+        points[1] = LatLng(latitude - ((sqrt(3.0) * degreeRadius)/2), longitude + (degreeRadius/2))
+        points[2] = LatLng(latitude - ((sqrt(3.0) * degreeRadius)/2), longitude - (degreeRadius/2))
+        points[3] = LatLng(latitude, longitude - degreeRadius)
+        points[4] = LatLng(latitude + ((sqrt(3.0) * degreeRadius)/2), longitude - (degreeRadius/2))
+        points[5] = LatLng(latitude + ((sqrt(3.0) * degreeRadius)/2), longitude + (degreeRadius/2))
 
         return points
     }
