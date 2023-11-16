@@ -3,7 +3,6 @@ package com.packages.heatmap.ui.components
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -41,18 +40,18 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.packages.heatmap.R
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
-import com.packages.heatmap.walkscore.CircleArea
+import com.packages.heatmap.walkscore.HexagonArea
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -74,7 +73,7 @@ class Map {
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(location, currentZoom)
         }
-        var currentArea by remember { mutableStateOf(CircleArea.mapping[viewModel.currentLatLong]) }
+        var currentArea by remember { mutableStateOf(HexagonArea.mapping[viewModel.currentLatLong]) }
         LaunchedEffect(cameraPositionState) {
             snapshotFlow { viewModel.currentLatLong }.collectLatest {
                 cameraPositionState.animate(
@@ -108,18 +107,17 @@ class Map {
         {
             val sheetState = rememberModalBottomSheetState()
             for (key: LatLng in viewModel.dataMap.keys) {
-                val walkScoreObj: CircleArea = viewModel.dataMap[key]!!
+                val walkScoreObj: HexagonArea = viewModel.dataMap[key]!!
                 location = LatLng(walkScoreObj.latitude, walkScoreObj.longitude)
-                Circle(
-                    center = location,
-                    radius = walkScoreObj.radius,
+                Polygon(
+                    points = walkScoreObj.getPoints(),
                     strokeColor = Color.Transparent,
                     fillColor = Area.getColorByWalkscore(walkScoreObj.walkscore),
                     tag = walkScoreObj,
                     clickable = true,
                     onClick = {
                         active = true
-                        currentArea = it.tag as CircleArea
+                        currentArea = it.tag as HexagonArea
                     }
                 )
             }

@@ -104,7 +104,7 @@ abstract class Area (
                     val request = Gson().fromJson(inputStreamReader, Request::class.java)
                     inputStreamReader.close()
                     inputSystem.close()
-                    CircleArea(latitude, longitude, request.walkscore, address = address, description = request.description)
+                    HexagonArea(latitude, longitude, request.walkscore, address = address, description = request.description)
                 }
                 else
                     Log.w("Connection Error", "Failed to connect")

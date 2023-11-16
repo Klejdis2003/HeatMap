@@ -16,6 +16,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.CircleArea
+import com.packages.heatmap.walkscore.HexagonArea
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,8 @@ class LocationViewModel : ViewModel() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var placesClient: PlacesClient
     lateinit var geoCoder: Geocoder
-    val dataMap = CircleArea.mapping
-    val firstMapObject: CircleArea = dataMap[dataMap.keys.first()]!!
+    val dataMap = HexagonArea.mapping
+    val firstMapObject: HexagonArea = dataMap[dataMap.keys.first()]!!
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
     var currentLatLong by mutableStateOf(LatLng(firstMapObject.latitude, firstMapObject.longitude))
