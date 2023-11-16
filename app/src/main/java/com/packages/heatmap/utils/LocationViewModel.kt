@@ -96,5 +96,21 @@ class LocationViewModel : ViewModel() {
         )
         thread.start()
         thread.join()
+        if (currentLatLong in dataMap.keys) {
+            dataMap[currentLatLong]?.getNeighbors()?.forEach {
+                val address: String = result ?: try{
+                    geoCoder.getFromLocation(it.latitude, it.longitude, 1)?.get(0)?.getAddressLine(0)!!
+                } catch(e: Exception){
+                    "Could not locate"
+                }
+                val thread = Area.getAreaFromAPIRequest(
+                    it.latitude,
+                    it.longitude,
+                    address
+                )
+                thread.start()
+                thread.join()
+            }
+        }
     }
 }

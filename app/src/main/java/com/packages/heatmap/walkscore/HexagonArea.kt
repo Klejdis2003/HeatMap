@@ -4,7 +4,10 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.math.sqrt
 
 class HexagonArea() : Area() {
-    private val radius : Double = 50.0
+    val radius : Double = 100.0
+    private val degreeRadius : Double = radius / 111111 // 111111 meters is approx equiv to 1 degree
+    private val points: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
+    private val neighbors: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
 
     companion object{
         val mapping: HashMap<LatLng, HexagonArea> = HashMap()
@@ -17,14 +20,14 @@ class HexagonArea() : Area() {
         this.address = address
         this.description = description
         mapping[LatLng(latitude, longitude)] = this
+        makePoints()
+        makeNeighbors()
     }
 
-    fun getPoints(): MutableList<LatLng> {
+    private fun makePoints() {
         /*
             Source: https://www.quora.com/How-can-you-find-the-coordinates-in-a-hexagon
          */
-        val points: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
-        val degreeRadius = radius / 111111 // 111111 meters is approx equiv to 1 degree
         points[0] = LatLng(latitude, longitude + (degreeRadius))
         points[1] = LatLng(latitude - ((sqrt(3.0) * degreeRadius)/2), longitude + (degreeRadius/2))
         points[2] = LatLng(latitude - ((sqrt(3.0) * degreeRadius)/2), longitude - (degreeRadius/2))
@@ -32,7 +35,27 @@ class HexagonArea() : Area() {
         points[4] = LatLng(latitude + ((sqrt(3.0) * degreeRadius)/2), longitude - (degreeRadius/2))
         points[5] = LatLng(latitude + ((sqrt(3.0) * degreeRadius)/2), longitude + (degreeRadius/2))
 
+    }
+
+    private fun makeNeighbors() {
+        /*
+            Source: https://www.redblobgames.com/grids/hexagons/
+         */
+        neighbors[0] = LatLng(latitude + (degreeRadius * 0.85), longitude + (degreeRadius * 1.5))
+        neighbors[1] = LatLng(latitude + (degreeRadius * 0.85), longitude - (degreeRadius * 1.5))
+        neighbors[2] = LatLng(latitude - (degreeRadius * 0.85), longitude - (degreeRadius * 1.5))
+        neighbors[3] = LatLng(latitude - (degreeRadius * 0.85), longitude + (degreeRadius * 1.5))
+        neighbors[4] = LatLng(latitude + (degreeRadius * 1.7), longitude)
+        neighbors[5] = LatLng(latitude - (degreeRadius * 1.7), longitude)
+
+    }
+
+    fun getPoints() : MutableList<LatLng> {
         return points
+    }
+
+    fun getNeighbors() : MutableList<LatLng> {
+        return neighbors
     }
 
     override fun containsPoint(point: LatLng): Boolean {
