@@ -109,8 +109,7 @@ class Map {
                 }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
                 viewModel.update()
-            },
-            uiSettings = MapUiSettings(zoomControlsEnabled = false)
+            }
         )
         {
             val sheetState = rememberModalBottomSheetState()
@@ -124,7 +123,7 @@ class Map {
                     tag = walkScoreObj,
                     clickable = true,
                     onClick = {
-                        val obj = it.tag as CircleArea
+                        val obj = it.tag as HexagonArea
                         if (obj.address == "")
                             obj.address =
                                 viewModel.geoCoder.getFromLocation(obj.latitude, obj.longitude, 1)
@@ -149,7 +148,7 @@ class Map {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShowBottomSheet(currentArea: CircleArea) {
+    fun ShowBottomSheet(currentArea: HexagonArea) {
         val context = LocalContext.current
         val sheetState = rememberModalBottomSheetState()
         ModalBottomSheet(
