@@ -56,8 +56,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            HeatMapTheme { HomeScreen()
-            }
+            HeatMapTheme { HomeScreen() }
         }
     }
 @RequiresApi(Build.VERSION_CODES.S)
@@ -74,7 +73,6 @@ fun HomeScreen() {
     } else {
         Color.Transparent.toArgb()
     }
-
     window.navigationBarColor =  color.toArgb()
 
     Surface (
