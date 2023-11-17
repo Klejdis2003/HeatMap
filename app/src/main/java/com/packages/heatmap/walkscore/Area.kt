@@ -3,14 +3,6 @@ package com.packages.heatmap.walkscore
 import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
-import com.packages.heatmap.BuildConfig
-import com.packages.heatmap.utils.LocationViewModel
-import com.packages.heatmap.walkscore.api.Request
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.pow
@@ -91,27 +83,27 @@ abstract class Area (
             }
             return results
         }
-        fun getAreaFromAPIRequest(latitude: Double, longitude: Double, address: String? = ""): Thread {
-            return Thread {
-                val url = URL(
-                    "https://api.walkscore.com/score?format=json&" +
-                            "address=${URLEncoder.encode(address, "UTF-8")}&lat=${latitude}&" +
-                            "lon=${longitude}&transit=1&bike=1&wsapikey=${BuildConfig.WALKSCORE_API_KEY}"
-                )
-                val connection = url.openConnection() as HttpURLConnection
-                if (connection.responseCode == 200) {
-                    val inputSystem = connection.inputStream
-                    val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
 
-                    val request = Gson().fromJson(inputStreamReader, Request::class.java)
-                    inputStreamReader.close()
-                    inputSystem.close()
-                    CircleArea(latitude, longitude, request.walkscore, address = address, description = request.description)
-                }
-                else
-                    Log.w("Connection Error", "Failed to connect")
-            }
-        }
+//        fun getAreaFromAPIRequest(latitude: Double, longitude: Double, address: String? = ""): Thread {
+//            return Thread {
+//                val url = URL(
+//                    "https://api.walkscore.com/score?format=json&" +
+//                            "address=1119%8th%20Avenue%20Seattle%20WA%2098101&lat=${latitude}&" +
+//                            "lon=${longitude}&transit=1&bike=1&wsapikey=${BuildConfig.WALKSCORE_API_KEY}"
+//                )
+//                val connection = url.openConnection() as HttpURLConnection
+//                if (connection.responseCode == 200) {
+//                    val inputSystem = connection.inputStream
+//                    val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
+//                    val request = Gson().fromJson(inputStreamReader, Request::class.java)
+//                    inputStreamReader.close()
+//                    inputSystem.close()
+//                    HexagonArea(latitude, longitude, request.walkscore, address = address, description = request.description)
+//                }
+//                else
+//                    Log.w("Connection Error", "Failed to connect")
+//            }
+//        }
     }
     override fun toString(): String {
         return "Lat: $latitude, Long: $longitude, Walkscore: $walkscore"

@@ -3,6 +3,7 @@ package com.packages.heatmap.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Geocoder
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,18 +15,24 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.packages.heatmap.walkscore.Area
-import com.packages.heatmap.walkscore.CircleArea
+import com.google.gson.Gson
+import com.packages.heatmap.BuildConfig
+import com.packages.heatmap.walkscore.HexagonArea
+import com.packages.heatmap.walkscore.api.Request
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class LocationViewModel : ViewModel() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var placesClient: PlacesClient
     lateinit var geoCoder: Geocoder
-    val dataMap = CircleArea.mapping
-    val firstMapObject: CircleArea = dataMap[dataMap.keys.first()]!!
+    //val dataMap by  mutableStateOf(HexagonArea.mapping)
+    val firstMapObject: HexagonArea = HexagonArea.mapping[HexagonArea.mapping.keys.first()]!!
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
     var currentLatLong by mutableStateOf(LatLng(firstMapObject.latitude, firstMapObject.longitude))
@@ -83,17 +90,60 @@ class LocationViewModel : ViewModel() {
         }
     }
     fun update(result: String? = null){
-        val address: String = result ?: try{
-                geoCoder.getFromLocation(currentLatLong.latitude, currentLatLong.longitude, 1)?.get(0)?.getAddressLine(0)!!
-            } catch(e: Exception){
-                "Could not locate."
+        viewModelScope.launch(Dispatchers.IO){
+            val address: String = result ?: try {
+                geoCoder.getFromLocation(currentLatLong.latitude, currentLatLong.longitude, 1)
+                    ?.get(0)?.getAddressLine(0)!!
+            } catch (e: Exception) {
+                "Could not locate"
             }
-        val thread = Area.getAreaFromAPIRequest(
-            currentLatLong.latitude,
-            currentLatLong.longitude,
-            address
+            makeAreaFromAPIRequest(
+                currentLatLong.latitude,
+                currentLatLong.longitude,
+                address
+            )
+
+            if (currentLatLong in HexagonArea.mapping.keys) {
+                HexagonArea.mapping[currentLatLong]?.getNeighbors()?.forEach {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        val address: String = try {
+                            geoCoder.getFromLocation(it.latitude, it.longitude, 1)?.get(0)
+                                ?.getAddressLine(0)!!
+                        } catch (e: Exception) {
+                            "Could not locate"
+                        }
+                        makeAreaFromAPIRequest(
+                            it.latitude,
+                            it.longitude,
+                            address
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun makeAreaFromAPIRequest(latitude: Double, longitude: Double, address: String? = "") {
+        val url = URL(
+            "https://api.walkscore.com/score?format=json&" +
+                    "address=1119%8th%20Avenue%20Seattle%20WA%2098101&lat=${latitude}&" +
+                    "lon=${longitude}&transit=1&bike=1&wsapikey=${BuildConfig.WALKSCORE_API_KEY}"
         )
-        thread.start()
-        thread.join()
+        val connection = url.openConnection() as HttpURLConnection
+        if (connection.responseCode == 200) {
+            val inputSystem = connection.inputStream
+            val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
+            val request = Gson().fromJson(inputStreamReader, Request::class.java)
+            inputStreamReader.close()
+            inputSystem.close()
+            HexagonArea(
+                latitude,
+                longitude,
+                request.walkscore,
+                address = address,
+                description = request.description
+            )
+        } else
+            Log.w("Connection Error", "Failed to connect")
     }
 }
