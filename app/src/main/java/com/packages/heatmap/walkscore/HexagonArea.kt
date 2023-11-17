@@ -1,5 +1,8 @@
 package com.packages.heatmap.walkscore
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.sqrt
 
@@ -10,7 +13,7 @@ class HexagonArea() : Area() {
     private val neighbors: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
 
     companion object{
-        val mapping: HashMap<LatLng, HexagonArea> = HashMap()
+        var mapping by mutableStateOf(emptyMap<LatLng, HexagonArea>())
     }
 
     constructor(latitude: Double, longitude: Double, walkScore: Int, address: String? = "", description: String? = "") : this() {
@@ -19,9 +22,13 @@ class HexagonArea() : Area() {
         this.walkscore = walkScore
         this.address = address
         this.description = description
-        mapping[LatLng(latitude, longitude)] = this
+        addHex()
         makePoints()
         makeNeighbors()
+    }
+
+    private fun addHex() {
+        mapping += Pair<LatLng, HexagonArea>(LatLng(latitude, longitude), this)
     }
 
     private fun makePoints() {

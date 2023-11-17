@@ -106,8 +106,8 @@ class Map {
         )
         {
             val sheetState = rememberModalBottomSheetState()
-            for (key: LatLng in viewModel.dataMap.keys) {
-                val walkScoreObj: HexagonArea = viewModel.dataMap[key]!!
+            for (key: LatLng in HexagonArea.mapping.keys) {
+                val walkScoreObj: HexagonArea = HexagonArea.mapping[key]!!
                 location = LatLng(walkScoreObj.latitude, walkScoreObj.longitude)
                 Polygon(
                     points = walkScoreObj.getPoints(),
@@ -125,7 +125,7 @@ class Map {
             Marker(
                 state = MarkerState(position = viewModel.currentLatLong),
                 onClick = {
-                    currentArea = viewModel.dataMap[viewModel.currentLatLong]
+                    currentArea = HexagonArea.mapping[viewModel.currentLatLong]
                     active = true
                     true
                 }

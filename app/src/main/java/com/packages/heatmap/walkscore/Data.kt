@@ -3,7 +3,7 @@ package com.packages.heatmap.walkscore
 import com.google.android.gms.maps.model.LatLng
 import com.opencsv.CSVReader
 
-fun buildHashMap(csvReader: CSVReader): HashMap<LatLng, HexagonArea> {
+fun buildHashMap(csvReader: CSVReader): Map<LatLng, HexagonArea> {
     var nextLine: Array<String>?
     while (csvReader.readNext().also { nextLine = it } != null) {
         try {
