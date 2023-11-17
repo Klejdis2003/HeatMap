@@ -3,7 +3,6 @@ package com.packages.heatmap.ui.components
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -43,19 +42,19 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.packages.heatmap.R
 import com.packages.heatmap.ui.components.Component.Companion.active
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
-import com.packages.heatmap.walkscore.CircleArea
+import com.packages.heatmap.walkscore.HexagonArea
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -70,14 +69,14 @@ class Map {
     var active by mutableStateOf(false)
 
     @Composable
-    fun ShowMap(viewModel: LocationViewModel) {
+    fun ShowMap(viewModel: LocationViewModel, darkTheme: Boolean) {
         val context = LocalContext.current
         var location = viewModel.currentLatLong
         var currentZoom by remember { mutableFloatStateOf(12f) }
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(location, currentZoom)
         }
-        var currentArea by remember { mutableStateOf(CircleArea.mapping[viewModel.currentLatLong]) }
+        var currentArea by remember { mutableStateOf(HexagonArea.mapping[viewModel.currentLatLong]) }
         LaunchedEffect(cameraPositionState) {
             snapshotFlow { viewModel.currentLatLong }.collectLatest {
                 cameraPositionState.animate(
@@ -89,7 +88,7 @@ class Map {
                 currentZoom = 10f
             }
         }
-        val mapStyle = if (isSystemInDarkTheme()) {
+        val mapStyle = if (darkTheme) {
             MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.dark_map_style)
         } else {
             MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.light_map_style)
@@ -110,16 +109,16 @@ class Map {
                 }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
                 viewModel.update()
-            }
+            },
+            uiSettings = MapUiSettings(zoomControlsEnabled = false)
         )
         {
-
-            for (key: LatLng in viewModel.dataMap.keys) {
-                val walkScoreObj: CircleArea = viewModel.dataMap[key]!!
+            val sheetState = rememberModalBottomSheetState()
+            for (key: LatLng in HexagonArea.mapping.keys) {
+                val walkScoreObj: HexagonArea = HexagonArea.mapping[key]!!
                 location = LatLng(walkScoreObj.latitude, walkScoreObj.longitude)
-                Circle(
-                    center = location,
-                    radius = walkScoreObj.radius,
+                Polygon(
+                    points = walkScoreObj.getPoints(),
                     strokeColor = Color.Transparent,
                     fillColor = Area.getColorByWalkscore(walkScoreObj.walkscore),
                     tag = walkScoreObj,
@@ -131,14 +130,14 @@ class Map {
                                 viewModel.geoCoder.getFromLocation(obj.latitude, obj.longitude, 1)
                                     ?.get(0)?.getAddressLine(0)!!
                         active = true
-                        currentArea = it.tag as CircleArea
+                        currentArea = it.tag as HexagonArea
                     }
                 )
             }
             Marker(
                 state = MarkerState(position = viewModel.currentLatLong),
                 onClick = {
-                    currentArea = viewModel.dataMap[viewModel.currentLatLong]
+                    currentArea = HexagonArea.mapping[viewModel.currentLatLong]
                     active = true
                     true
                 }

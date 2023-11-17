@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,16 +16,19 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.places.api.Places
 import com.opencsv.CSVReader
+import com.packages.heatmap.ui.components.DarkThemeSwitch
 import com.packages.heatmap.ui.components.Map
-
 import com.packages.heatmap.ui.components.SearchBar
-
 import com.packages.heatmap.ui.theme.HeatMapTheme
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.buildHashMap
@@ -56,14 +60,22 @@ open class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            HeatMapTheme { HomeScreen()
+            val systemTheme:Boolean = isSystemInDarkTheme()
+            var darkTheme by remember { mutableStateOf(systemTheme)}
+            HeatMapTheme (
+                darkTheme = darkTheme
+            ) {
+                HomeScreen (
+                    darkTheme = darkTheme,
+                    onThemeUpdated = {darkTheme = !darkTheme}
+                )
             }
         }
     }
 @RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("PrivateResource")
 @Composable
-fun HomeScreen() {
+fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
     val defaultColor = MaterialTheme.colorScheme.surfaceContainer
     val color: Color = when{
         searchBar.active || map.active ->  defaultColor
@@ -75,18 +87,27 @@ fun HomeScreen() {
         Color.Transparent.toArgb()
     }
 
-    window.navigationBarColor =  color.toArgb()
+    window.navigationBarColor = color.toArgb()
 
     Surface (
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            map.ShowMap(viewModel!!)
+            map.ShowMap(viewModel!!, darkTheme)
             Column (
                 modifier = Modifier.safeDrawingPadding()
             ) {
                 Column {
                     searchBar.SearchbarField(viewModel!!, this@MainActivity, color = defaultColor)
+                }
+                Column (
+                    modifier = Modifier.weight(1f, true),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    // Empty to push menu buttons to the bottom
+                }
+                Column {
+                    DarkThemeSwitch(darkTheme, onThemeUpdated)
                 }
             }
         }
