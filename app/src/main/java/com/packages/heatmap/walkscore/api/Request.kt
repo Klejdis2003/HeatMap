@@ -5,5 +5,6 @@ data class Request(
     val description: String,
     val snapped_lat: Double,
     val snappped_long: Double,
-    val transit: Transit
+    val transit: Transit,
+    val status: Int
 )

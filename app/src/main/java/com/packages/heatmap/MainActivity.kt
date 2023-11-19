@@ -45,6 +45,7 @@ open class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         csvFile = InputStreamReader(assets.open("HeatMap.csv"))
         csvReader = CSVReader(csvFile)
+        buildHashMap(csvReader!!)
         viewModel = LocationViewModel()
         super.onCreate(savedInstanceState)
         viewModel!!.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)

@@ -65,6 +65,7 @@ class Map {
     private val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
     private val CONTENT_PADDING = 13.dp
 
+    /** Tracks the state of the bottom sheet.*/
     var active by mutableStateOf(false)
 
     @Composable
@@ -107,7 +108,7 @@ class Map {
                     else -> cameraPositionState.position.zoom
                 }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
-                viewModel.update()
+                viewModel.update(null)
             }
         )
         {
