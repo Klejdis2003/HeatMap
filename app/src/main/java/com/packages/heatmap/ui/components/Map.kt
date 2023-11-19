@@ -3,6 +3,7 @@ package com.packages.heatmap.ui.components
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.util.AttributeSet
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -38,6 +39,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 
 import com.google.android.gms.maps.model.LatLng
@@ -64,7 +67,6 @@ class Map {
     private val TITLE_FONT_SIZE: TextUnit = 20.sp
     private val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
     private val CONTENT_PADDING = 13.dp
-
     /** Tracks the state of the bottom sheet.*/
     var active by mutableStateOf(false)
 
@@ -88,19 +90,18 @@ class Map {
                 currentZoom = 10f
             }
         }
-        val mapStyle = if (darkTheme) {
-            MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.dark_map_style)
-        } else {
-            MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.light_map_style)
+        val mapStyle = when(darkTheme){
+            true -> MapTheme.Dark.Id
+            false -> MapTheme.Light.Id
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
                 mapType = MapType.NORMAL,
-                mapStyleOptions = mapStyle,
-                isIndoorEnabled = true
+                isIndoorEnabled = true,
             ),
+            googleMapOptionsFactory = { GoogleMapOptions().mapId(mapStyle) },
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
                 currentZoom = when {

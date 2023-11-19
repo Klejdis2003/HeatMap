@@ -17,11 +17,6 @@
             android:theme="@style/Theme.HeatMap"
             tools:targetApi="31">
         <activity
-                android:name=".MarkerDisplay"
-                android:exported="false"
-                android:label="@string/title_activity_marker_display"
-                android:theme="@style/Theme.HeatMap" />
-        <activity
                 android:name=".MainActivity"
                 android:exported="true"
                 android:theme="@style/Theme.HeatMap">
