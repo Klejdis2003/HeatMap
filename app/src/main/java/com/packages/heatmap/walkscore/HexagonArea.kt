@@ -31,6 +31,9 @@ class HexagonArea() : Area() {
         mapping += Pair<LatLng, HexagonArea>(LatLng(latitude, longitude), this)
     }
 
+    /**
+     * Uses the center of this object to generate the coordinates of the hexagon.
+     */
     private fun makePoints() {
         /*
             Source: https://www.quora.com/How-can-you-find-the-coordinates-in-a-hexagon
@@ -44,16 +47,30 @@ class HexagonArea() : Area() {
 
     }
 
-    private fun makeNeighbors() {
+    /**
+     Uses the center of this object to generate the coordinates of other neighbor hexagons.
+     It calls itself recursively a set number of times.
+     */
+    private fun makeNeighbors(latitude: Double = this.latitude, longitude: Double = this.longitude, nTimes: Int = 0) {
         /*
             Source: https://www.redblobgames.com/grids/hexagons/
          */
-        neighbors[0] = LatLng(latitude + (degreeRadius * 0.85), longitude + (degreeRadius * 1.5))
-        neighbors[1] = LatLng(latitude + (degreeRadius * 0.85), longitude - (degreeRadius * 1.5))
-        neighbors[2] = LatLng(latitude - (degreeRadius * 0.85), longitude - (degreeRadius * 1.5))
-        neighbors[3] = LatLng(latitude - (degreeRadius * 0.85), longitude + (degreeRadius * 1.5))
-        neighbors[4] = LatLng(latitude + (degreeRadius * 1.7), longitude)
-        neighbors[5] = LatLng(latitude - (degreeRadius * 1.7), longitude)
+
+        if(nTimes == 3)
+            return
+        val currentNeighbors = ArrayList<LatLng>()
+        currentNeighbors.add( LatLng(latitude + (degreeRadius * 0.85), longitude + (degreeRadius * 1.5)))
+        currentNeighbors.add(LatLng(latitude + (degreeRadius * 0.85), longitude - (degreeRadius * 1.5)))
+        currentNeighbors.add(LatLng(latitude - (degreeRadius * 0.85), longitude - (degreeRadius * 1.5)))
+        currentNeighbors.add(LatLng(latitude - (degreeRadius * 0.85), longitude + (degreeRadius * 1.5)))
+        currentNeighbors.add(LatLng(latitude + (degreeRadius * 1.7), longitude))
+        currentNeighbors.add(LatLng(latitude - (degreeRadius * 1.7), longitude))
+
+        for(neighbor in currentNeighbors){
+            neighbors.add(neighbor)
+            makeNeighbors(neighbor.latitude, neighbor.longitude, nTimes + 1)
+        }
+
 
     }
 

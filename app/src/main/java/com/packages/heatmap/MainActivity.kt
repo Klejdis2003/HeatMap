@@ -45,7 +45,7 @@ open class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         csvFile = InputStreamReader(assets.open("HeatMap.csv"))
         csvReader = CSVReader(csvFile)
-        val dataMap = buildHashMap(csvReader!!)
+        buildHashMap(csvReader!!)
         viewModel = LocationViewModel()
         super.onCreate(savedInstanceState)
         viewModel!!.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -62,9 +62,8 @@ open class MainActivity : ComponentActivity() {
         setContent {
             val systemTheme:Boolean = isSystemInDarkTheme()
             var darkTheme by remember { mutableStateOf(systemTheme)}
-            HeatMapTheme (
-                darkTheme = darkTheme
-            ) {
+            HeatMapTheme (darkTheme = darkTheme)
+            {
                 HomeScreen (
                     darkTheme = darkTheme,
                     onThemeUpdated = {darkTheme = !darkTheme}
@@ -76,7 +75,9 @@ open class MainActivity : ComponentActivity() {
 @SuppressLint("PrivateResource")
 @Composable
 fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
+    /** Default Material 3 surface container color. */
     val defaultColor = MaterialTheme.colorScheme.surfaceContainer
+
     val color: Color = when{
         searchBar.active || map.active ->  defaultColor
         else -> Color.Transparent

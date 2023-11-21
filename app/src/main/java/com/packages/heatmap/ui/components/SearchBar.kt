@@ -66,14 +66,10 @@ class SearchBar {
                                 enabled = true,
                                 role = Role.Button,
                                 onClick = {
-                                    Log.w("Coordinates", viewModel.currentLatLong.toString())
                                     viewModel.getCoordinates(item)
-                                    Log.w("Coordinates", viewModel.currentLatLong.toString())
                                     active = false
                                     text = ""
                                     viewModel.locationAutofill.clear()
-                                    //Log.w("Current Location", viewModel.currentLocation.toString())
-                                    Log.w("Current lat/lng", "Lat: ${viewModel.currentLatLong.latitude}, Lng: ${viewModel.currentLatLong.longitude}")
                                 }
                             ),
                         colors = CardDefaults.cardColors(containerColor = color),

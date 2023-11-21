@@ -2,15 +2,7 @@ package com.packages.heatmap.walkscore
 
 import android.util.Log
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
-import com.packages.heatmap.BuildConfig
-import com.packages.heatmap.utils.LocationViewModel
-import com.packages.heatmap.walkscore.api.Request
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.pow
@@ -32,11 +24,13 @@ abstract class Area (
         mapping[LatLng(this.latitude, this.longitude)] = this
     }
     companion object {
+        private val NO_WALKSCORE_DATA = 0
         private const val RED: Float = 360f
         private const val GREEN = 111f
         private const val ALPHA = 0.6f
         private const val MAX_SATURATION = 1f
-        private val walkscoreColorMapping: HashMap<Int, Color> = hashMapOf(
+        private val colorMap: HashMap<Int, Color> = hashMapOf(
+            0 to Color.hsl(0f, 0f, 0.5f, ALPHA), //gray
             1 to Color.hsl(RED, MAX_SATURATION, 0.22f, ALPHA), //darkest red
             2 to Color.hsl(RED, MAX_SATURATION, 0.3f, ALPHA),
             3 to Color.hsl(RED, MAX_SATURATION, 0.38f, ALPHA),
@@ -49,6 +43,13 @@ abstract class Area (
         )
 
         var mapping: HashMap<LatLng, Area> = HashMap()
+
+        /**
+         * Computes the distance between two points on the earth, taking the curvature into account.
+         * @param p1 The first point.
+         * @param p2 The second point.
+         * @return The distance between the two points in meters.
+         */
         internal fun computePointDistance(p1: LatLng, p2: LatLng): Double {
             val R: Double = 6.371 * 10.0.pow(6.0) //radius of the erarth in meters
             val latRadians: Double =
@@ -68,53 +69,42 @@ abstract class Area (
             )
         }
 
+        /**
+         * @param walkScore The walkscore value.
+         * @return The color that corresponds to that value in the heatmap.
+         */
         fun getColorByWalkscore(walkScore: Int): Color {
-            Log.w("AppDataKlejdis", (walkScore - 1).toString())
-            try {
-                val walkScoreLevel = (walkScore - 1).toString()[0].digitToInt()
-                return walkscoreColorMapping[walkScoreLevel]!!
-            }
-            catch(e: Exception){
-                return Color.Transparent
-            }
+            if(walkScore == NO_WALKSCORE_DATA)
+                return colorMap[0]!!;
+            val walkScoreLevel = (walkScore - 1).toString()[0].digitToInt()
+            return colorMap[walkScoreLevel]!!
+
         }
 
-        fun getListOfAreasThatContainPoint(
-            point: LatLng,
-            mapping: HashMap<LatLng, Area>
-        ): ArrayList<Area> {
-            val results = ArrayList<Area>()
-            for (key: LatLng in mapping.keys) {
-                if (mapping[key]!!.containsPoint(point)) {
-                    results.add(mapping[key]!!)
-                }
-            }
-            return results
-        }
-
-//        fun getAreaFromAPIRequest(latitude: Double, longitude: Double, address: String? = ""): Thread {
-//            return Thread {
-//                val url = URL(
-//                    "https://api.walkscore.com/score?format=json&" +
-//                            "address=1119%8th%20Avenue%20Seattle%20WA%2098101&lat=${latitude}&" +
-//                            "lon=${longitude}&transit=1&bike=1&wsapikey=${BuildConfig.WALKSCORE_API_KEY}"
-//                )
-//                val connection = url.openConnection() as HttpURLConnection
-//                if (connection.responseCode == 200) {
-//                    val inputSystem = connection.inputStream
-//                    val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
-//                    val request = Gson().fromJson(inputStreamReader, Request::class.java)
-//                    inputStreamReader.close()
-//                    inputSystem.close()
-//                    HexagonArea(latitude, longitude, request.walkscore, address = address, description = request.description)
+//        /**
+//         * @param point The point to check.
+//         * @return A list of Areas that contain the point.
+//         */
+//        fun getListOfAreasThatContainPoint(point: LatLng): ArrayList<Area> {
+//            val results = ArrayList<Area>()
+//            for (key: LatLng in mapping.keys) {
+//                if (mapping[key]!!.containsPoint(point)) {
+//                    results.add(mapping[key]!!)
 //                }
-//                else
-//                    Log.w("Connection Error", "Failed to connect")
 //            }
+//            return results
 //        }
     }
+
     override fun toString(): String {
         return "Lat: $latitude, Long: $longitude, Walkscore: $walkscore"
     }
+
+    /**
+     * The implementation of this method depends on the shape chosen to represent the area. Must be overidden
+     * by child classes.
+     * @param point The point to check.
+     * @return True if the point is contained in the area, false otherwise.
+     */
     internal abstract fun containsPoint(point: LatLng): Boolean
 }
