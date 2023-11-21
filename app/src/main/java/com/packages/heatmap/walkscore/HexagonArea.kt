@@ -28,7 +28,7 @@ class HexagonArea() : Area() {
     }
 
     private fun addHex() {
-        mapping += Pair<LatLng, HexagonArea>(LatLng(latitude, longitude), this)
+        mapping += Pair(LatLng(latitude, longitude), this)
     }
 
     /**

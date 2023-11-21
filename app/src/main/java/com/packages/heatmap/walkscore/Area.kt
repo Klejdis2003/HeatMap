@@ -1,6 +1,5 @@
 package com.packages.heatmap.walkscore
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.asin
@@ -75,7 +74,7 @@ abstract class Area (
          */
         fun getColorByWalkscore(walkScore: Int): Color {
             if(walkScore == NO_WALKSCORE_DATA)
-                return colorMap[0]!!;
+                return colorMap[0]!!
             val walkScoreLevel = (walkScore - 1).toString()[0].digitToInt()
             return colorMap[walkScoreLevel]!!
 

@@ -3,7 +3,6 @@ package com.packages.heatmap.ui.components
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.util.AttributeSet
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -40,11 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
-
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -53,7 +49,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.packages.heatmap.R
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.HexagonArea
@@ -72,7 +67,6 @@ class Map {
 
     @Composable
     fun ShowMap(viewModel: LocationViewModel, darkTheme: Boolean) {
-        val context = LocalContext.current
         var location = viewModel.currentLatLong
         var currentZoom by remember { mutableFloatStateOf(12f) }
         val cameraPositionState = rememberCameraPositionState {
@@ -113,7 +107,6 @@ class Map {
             }
         )
         {
-            val sheetState = rememberModalBottomSheetState()
             for (key: LatLng in HexagonArea.mapping.keys) {
                 val walkScoreObj: HexagonArea = HexagonArea.mapping[key]!!
                 location = LatLng(walkScoreObj.latitude, walkScoreObj.longitude)
@@ -180,7 +173,7 @@ class Map {
                                 fontSize = SUB_TITLE_FONT_SIZE,
                                 fontWeight = FontWeight.Bold
                             )
-                            Text("${currentArea.walkscore.toString()}/100")
+                            Text("${currentArea.walkscore}/100")
                         }
                         Row(
                             modifier = Modifier.padding(0.dp, CONTENT_PADDING)
