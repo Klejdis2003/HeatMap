@@ -19,9 +19,12 @@ import com.google.gson.Gson
 import com.packages.heatmap.BuildConfig
 import com.packages.heatmap.walkscore.HexagonArea
 import com.packages.heatmap.walkscore.api.Request
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.withContext
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -36,6 +39,8 @@ class LocationViewModel : ViewModel() {
     var locationState by mutableStateOf<LocationState>(LocationState.NoPermission)
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
     var currentLatLong by mutableStateOf(LatLng(firstMapObject.latitude, firstMapObject.longitude))
+    @OptIn(DelicateCoroutinesApi::class)
+    val hexContext = newSingleThreadContext("HexContext")
 
     @SuppressLint("MissingPermission")
     fun getCurrentLocation() {
@@ -142,7 +147,7 @@ class LocationViewModel : ViewModel() {
      * @param longitude The longitude of the location.
      * @param address The address of the location, if available.
      */
-    private fun makeAreaFromAPIRequest(latitude: Double, longitude: Double, address: String = "") {
+    private suspend fun makeAreaFromAPIRequest(latitude: Double, longitude: Double, address: String = "") {
         val url = URL(
             "https://api.walkscore.com/score?format=json&" +
                     "address=${URLEncoder.encode(address, "UTF-8")}&lat=${latitude}&" +
@@ -155,13 +160,15 @@ class LocationViewModel : ViewModel() {
             val request = Gson().fromJson(inputStreamReader, Request::class.java)
             inputStreamReader.close()
             inputSystem.close()
-            HexagonArea(
-                latitude,
-                longitude,
-                request.walkscore,
-                address = address,
-                description = request.description
-            )
+            withContext(hexContext) {
+                HexagonArea(
+                    latitude,
+                    longitude,
+                    request.walkscore,
+                    address = address,
+                    description = request.description
+                )
+            }
         } else
             Log.w("Connection Error", "Failed to connect")
     }
