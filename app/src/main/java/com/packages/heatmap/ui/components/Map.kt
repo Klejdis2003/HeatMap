@@ -57,7 +57,6 @@ import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("FlowOperatorInvokedInComposition")
-
 class Map {
     private val TITLE_FONT_SIZE: TextUnit = 20.sp
     private val SUB_TITLE_FONT_SIZE: TextUnit = 14.sp
@@ -84,10 +83,7 @@ class Map {
                 currentZoom = 10f
             }
         }
-        val mapStyle = when(darkTheme){
-            true -> MapTheme.Dark.Id
-            false -> MapTheme.Light.Id
-        }
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
@@ -95,7 +91,12 @@ class Map {
                 mapType = MapType.NORMAL,
                 isIndoorEnabled = true,
             ),
-            googleMapOptionsFactory = { GoogleMapOptions().mapId(mapStyle) },
+            googleMapOptionsFactory = {
+                when(darkTheme) {
+                    true -> GoogleMapOptions().mapId(MapTheme.Dark.Id)
+                    false -> GoogleMapOptions().mapId(MapTheme.Light.Id)
+                }
+            },
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
                 currentZoom = when {
@@ -153,7 +154,9 @@ class Map {
             modifier = Modifier.defaultMinSize()
         )
         {
-            Row(modifier = Modifier.wrapContentSize().padding(12.dp, 0.dp))
+            Row(modifier = Modifier
+                .wrapContentSize()
+                .padding(12.dp, 0.dp))
             {
                 Text(
                     text = currentArea.address ?: "No Data",
@@ -164,7 +167,9 @@ class Map {
             }
 
             if (currentArea.walkscore != 0) {
-                Row(modifier = Modifier.wrapContentSize().padding(12.dp, 4.dp)) {
+                Row(modifier = Modifier
+                    .wrapContentSize()
+                    .padding(12.dp, 4.dp)) {
                     Column {
                         Row(modifier = Modifier.padding(0.dp, CONTENT_PADDING))
                         {
@@ -176,7 +181,8 @@ class Map {
                             Text("${currentArea.walkscore}/100")
                         }
                         Row(
-                            modifier = Modifier.padding(0.dp, CONTENT_PADDING)
+                            modifier = Modifier
+                                .padding(0.dp, CONTENT_PADDING)
                                 .wrapContentSize()
                         )
                         {

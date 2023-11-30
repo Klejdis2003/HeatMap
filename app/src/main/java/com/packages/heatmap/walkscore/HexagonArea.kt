@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.math.sqrt
 
 class HexagonArea() : Area() {
-    val radius : Double = 100.0
+    private val radius : Double = 100.0
     private val degreeRadius : Double = radius / 111111 // 111111 meters is approx equiv to 1 degree
     private val points: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
     private val neighbors: MutableList<LatLng> = MutableList(6) { LatLng(latitude, longitude) }
