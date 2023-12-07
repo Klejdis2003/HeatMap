@@ -104,7 +104,7 @@ class Map {
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
                 currentZoom = when {
-                    cameraPositionState.position.zoom < 16f -> 16f
+                    cameraPositionState.position.zoom < 15f -> 15f
                     else -> cameraPositionState.position.zoom
                 }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
@@ -116,6 +116,7 @@ class Map {
             for (key: LatLng in HexagonArea.mapping.keys) {
                 val walkScoreObj: HexagonArea = HexagonArea.mapping[key]!!
                 location = LatLng(walkScoreObj.latitude, walkScoreObj.longitude)
+
                 Polygon(
                     points = walkScoreObj.getPoints(),
                     strokeColor = Color.Transparent,
