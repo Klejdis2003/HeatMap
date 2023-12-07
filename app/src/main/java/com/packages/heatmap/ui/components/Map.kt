@@ -100,7 +100,7 @@ class Map {
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
                 currentZoom = when {
-                    cameraPositionState.position.zoom < 12f -> 12f
+                    cameraPositionState.position.zoom < 15f -> 15f
                     else -> cameraPositionState.position.zoom
                 }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
