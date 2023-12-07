@@ -56,12 +56,10 @@ fun DarkThemeSwitch(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
                             Box (
                                 Modifier.rotate(-90f)
                             ) {
-                                if (darkTheme) {
+                                if (darkTheme)
                                     Icon(painterResource(R.drawable.baseline_dark_mode_24), null)
-                                } else {
-
+                                else
                                     Icon(painterResource(R.drawable.baseline_light_mode_24), null)
-                                }
                             }
                         }
                     )

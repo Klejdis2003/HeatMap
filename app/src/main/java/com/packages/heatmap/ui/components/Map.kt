@@ -3,7 +3,6 @@ package com.packages.heatmap.ui.components
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.util.AttributeSet
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -40,11 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -53,7 +50,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.packages.heatmap.R
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.HexagonArea
@@ -71,7 +67,8 @@ class Map {
     var active by mutableStateOf(false)
 
     @Composable
-    fun ShowMap(viewModel: LocationViewModel, darkTheme: Boolean) {
+    fun EdgeToEdgeMap(viewModel: LocationViewModel, isDarkTheme: Boolean) {
+
         val context = LocalContext.current
         var location = viewModel.currentLatLong
         var currentZoom by remember { mutableFloatStateOf(12f) }
@@ -90,7 +87,7 @@ class Map {
                 currentZoom = 10f
             }
         }
-        val mapStyle = when(darkTheme){
+        val mapStyle = when(isDarkTheme){
             true -> MapTheme.Dark.Id
             false -> MapTheme.Light.Id
         }
@@ -100,6 +97,8 @@ class Map {
             properties = MapProperties(
                 mapType = MapType.NORMAL,
                 isIndoorEnabled = true,
+                isBuildingEnabled = true,
+                //isMyLocationEnabled = true
             ),
             googleMapOptionsFactory = { GoogleMapOptions().mapId(mapStyle) },
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),

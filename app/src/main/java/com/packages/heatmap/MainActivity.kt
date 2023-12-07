@@ -61,12 +61,12 @@ open class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val systemTheme:Boolean = isSystemInDarkTheme()
-            var darkTheme by remember { mutableStateOf(systemTheme)}
-            HeatMapTheme (darkTheme = darkTheme)
+            var isDarkTheme by remember { mutableStateOf(systemTheme)}
+            HeatMapTheme (darkTheme = isDarkTheme)
             {
                 HomeScreen (
-                    darkTheme = darkTheme,
-                    onThemeUpdated = {darkTheme = !darkTheme}
+                    isDarkTheme = isDarkTheme,
+                    onThemeUpdated = {isDarkTheme = !isDarkTheme}
                 )
             }
         }
@@ -74,7 +74,7 @@ open class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("PrivateResource")
 @Composable
-fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
+fun HomeScreen(isDarkTheme: Boolean, onThemeUpdated: () -> Unit) {
     /** Default Material 3 surface container color. */
     val defaultColor = MaterialTheme.colorScheme.surfaceContainer
 
@@ -94,7 +94,7 @@ fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            map.ShowMap(viewModel!!, darkTheme)
+            map.EdgeToEdgeMap(viewModel!!, isDarkTheme)
             Column (
                 modifier = Modifier.safeDrawingPadding()
             ) {
@@ -108,7 +108,7 @@ fun HomeScreen(darkTheme: Boolean, onThemeUpdated: () -> Unit) {
                     // Empty to push menu buttons to the bottom
                 }
                 Column {
-                    DarkThemeSwitch(darkTheme, onThemeUpdated)
+                    DarkThemeSwitch(isDarkTheme, onThemeUpdated)
                 }
             }
         }
