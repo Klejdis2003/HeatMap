@@ -1,6 +1,5 @@
 package com.packages.heatmap.walkscore
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.asin
@@ -27,6 +26,7 @@ abstract class Area (
         private val NO_WALKSCORE_DATA = 0
         private const val RED: Float = 360f
         private const val GREEN = 111f
+        private const val YELLOW = 60f
         private const val ALPHA = 0.6f
         private const val MAX_SATURATION = 1f
         private val colorMap: HashMap<Int, Color> = hashMapOf(
@@ -34,9 +34,9 @@ abstract class Area (
             1 to Color.hsl(RED, MAX_SATURATION, 0.22f, ALPHA), //darkest red
             2 to Color.hsl(RED, MAX_SATURATION, 0.3f, ALPHA),
             3 to Color.hsl(RED, MAX_SATURATION, 0.38f, ALPHA),
-            4 to Color.hsl(RED, MAX_SATURATION, 0.30f, ALPHA),
-            5 to Color.hsl(1f, MAX_SATURATION, 0.69f, ALPHA),
-            6 to Color.hsl(GREEN, MAX_SATURATION, 0.72f, ALPHA),
+            4 to Color.hsl(YELLOW, MAX_SATURATION, 0.27f, ALPHA),
+            5 to Color.hsl(YELLOW, MAX_SATURATION, 0.42f, ALPHA),
+            6 to Color.hsl(YELLOW, MAX_SATURATION, 0.57f, ALPHA),
             7 to Color.hsl(GREEN, MAX_SATURATION, 0.57f, ALPHA),
             8 to Color.hsl(GREEN, MAX_SATURATION, 0.42f, ALPHA),
             9 to Color.hsl(GREEN, MAX_SATURATION, 0.27f, ALPHA) // most vibrant green
@@ -75,7 +75,7 @@ abstract class Area (
          */
         fun getColorByWalkscore(walkScore: Int): Color {
             if(walkScore == NO_WALKSCORE_DATA)
-                return colorMap[0]!!;
+                return colorMap[0]!!
             val walkScoreLevel = (walkScore - 1).toString()[0].digitToInt()
             return colorMap[walkScoreLevel]!!
 

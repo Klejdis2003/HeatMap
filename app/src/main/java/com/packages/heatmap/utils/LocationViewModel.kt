@@ -40,7 +40,7 @@ class LocationViewModel : ViewModel() {
     val locationAutofill = mutableStateListOf<AutoCompleteResult>()
     var currentLatLong by mutableStateOf(LatLng(firstMapObject.latitude, firstMapObject.longitude))
     @OptIn(DelicateCoroutinesApi::class)
-    private val hexContext = newSingleThreadContext("HexContext")
+    val hexContext = newSingleThreadContext("HexContext")
     @SuppressLint("MissingPermission")
     fun getCurrentLocation() {
         locationState = LocationState.LocationLoading
