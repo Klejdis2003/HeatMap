@@ -41,6 +41,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -49,6 +50,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.packages.heatmap.R
 import com.packages.heatmap.utils.LocationViewModel
 import com.packages.heatmap.walkscore.Area
 import com.packages.heatmap.walkscore.HexagonArea
@@ -83,24 +85,22 @@ class Map {
                 currentZoom = 10f
             }
         }
-
+        val mapStyle = when (darkTheme) {
+            true -> MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.dark_map_style)
+            false -> MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.light_map_style)
+        }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
                 mapType = MapType.NORMAL,
                 isIndoorEnabled = true,
+                mapStyleOptions = mapStyle
             ),
-            googleMapOptionsFactory = {
-                when(darkTheme) {
-                    true -> GoogleMapOptions().mapId(MapTheme.Dark.Id)
-                    false -> GoogleMapOptions().mapId(MapTheme.Light.Id)
-                }
-            },
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
                 currentZoom = when {
-                    cameraPositionState.position.zoom < 16f -> 16f
+                    cameraPositionState.position.zoom < 12f -> 12f
                     else -> cameraPositionState.position.zoom
                 }
                 viewModel.currentLatLong = LatLng(it.latitude, it.longitude)
