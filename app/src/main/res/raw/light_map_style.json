@@ -1,1 +1,33 @@
-[]
+[
+  {
+    "featureType": "landscape",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "saturation": -65
+      },
+      {
+        "lightness": -20
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "stylers": [
+      {
+        "lightness": -20
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "stylers": [
+      {
+        "saturation": -30
+      },
+      {
+        "lightness": -15
+      }
+    ]
+  }
+]

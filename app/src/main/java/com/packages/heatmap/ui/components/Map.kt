@@ -42,6 +42,7 @@ import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -88,19 +89,20 @@ class Map {
             }
         }
         val mapStyle = when(isDarkTheme){
-            true -> MapTheme.Dark.Id
-            false -> MapTheme.Light.Id
+            true -> MapStyleOptions.loadRawResourceStyle(context, MapTheme.Dark.Id)
+            false -> MapStyleOptions.loadRawResourceStyle(context, MapTheme.Light.Id)
         }
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
+                mapStyleOptions = mapStyle,
                 mapType = MapType.NORMAL,
                 isIndoorEnabled = true,
                 isBuildingEnabled = true,
                 //isMyLocationEnabled = true
             ),
-            googleMapOptionsFactory = { GoogleMapOptions().mapId(mapStyle) },
+
             uiSettings = MapUiSettings(compassEnabled = false, zoomControlsEnabled = false),
             onMapLongClick = {
                 currentZoom = when {
